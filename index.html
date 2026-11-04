@@ -1,1 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>BCG — Breaking Computation Group | Redes para Automação</title>
+<style>
+  /* ============ RESET & BASE ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --preto: #0a0a0a;
+    --preto-card: #141400;
+    --preto-suave: #1a1a00;
+    --amarelo: #ffcc00;
+    --amarelo-claro: #ffe066;
+    --amarelo-escuro: #333300;
+    --texto: #f5f5f5;
+    --texto-sec: #d4c97a;
+    --verde: #66ff66;
+    --vermelho: #ff4d4d;
+    --borda: #333300;
+    --raio: 12px;
+    --sombra-amarela: 0 0 24px rgba(255, 204, 0, 0.35);
+  }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--preto);
+    color: var(--texto);
+    min-height: 100vh;
+    line-height: 1.5;
+    padding: clamp(10px, 2vw, 20px);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  img, svg { max-width: 100%; height: auto; display: block; }
+
+  /* ============ HEADER ============ */
+  header {
+    text-align: center;
+    padding: clamp(20px, 5vw, 34px) clamp(14px, 4vw, 24px);
+    background: linear-gradient(135deg, #000 0%, #1a1a00 50%, #333300 100%);
+    border-radius: var(--raio);
+    margin-bottom: clamp(16px, 3vw, 22px);
+    border: 2px solid var(--amarelo);
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,204,0,0.04) 40px, rgba(255,204,0,0.04) 80px);
+    animation: scan 20s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes scan { from { transform: translate(0,0); } to { transform: translate(80px,80px); } }
+
+  header h1 {
+    font-size: clamp(1.15rem, 4.5vw, 1.9rem);
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+    color: var(--amarelo);
+    text-shadow: 0 0 18px rgba(255, 204, 0, 0.5);
+    word-wrap: break-word;
+  }
+  header .tagline {
+    font-size: clamp(0.72rem, 2.4vw, 0.9rem);
+    color: var(--texto-sec);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.4;
+  }
+  header .badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px clamp(10px, 3vw, 14px);
+    background: rgba(255, 204, 0, 0.15);
+    border: 1px solid var(--amarelo);
+    border-radius: 20px;
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    color: var(--amarelo);
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.8px;
+  }
+
+  /* ============ TABS (com scroll horizontal no mobile) ============ */
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: clamp(16px, 3vw, 20px);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1 1 auto;
+    min-width: 140px;
+    max-width: 280px;
+    padding: clamp(11px, 2.5vw, 13px) clamp(14px, 3vw, 26px);
+    border: 2px solid var(--amarelo);
+    border-radius: 8px;
+    background: var(--preto);
+    color: var(--amarelo);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: clamp(0.85rem, 2.6vw, 1rem);
+    transition: 0.25s;
+    letter-spacing: 0.3px;
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { background: var(--preto-suave); color: var(--amarelo-claro); }
+  .tab-btn.active {
+    background: var(--amarelo);
+    color: #000;
+    box-shadow: var(--sombra-amarela);
+  }
+
+  .tab-content { display: none; animation: fadeIn 0.35s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ============ CARDS DE CABOS ============ */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: clamp(12px, 2.5vw, 16px);
+    margin-bottom: clamp(16px, 3vw, 20px);
+  }
+  .card {
+    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
+    border-radius: var(--raio);
+    padding: clamp(18px, 3.5vw, 22px);
+    cursor: pointer;
+    border: 2px solid var(--borda);
+    transition: 0.25s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(255,204,0,0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .card:hover, .card:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--amarelo);
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.25);
+    outline: none;
+  }
+  .card.selected {
+    border-color: var(--amarelo);
+    background: linear-gradient(160deg, var(--amarelo-escuro), #4d4d00);
+    box-shadow: 0 0 24px rgba(255, 204, 0, 0.55);
+  }
+  .card .icon { font-size: clamp(2rem, 6vw, 2.5rem); margin-bottom: 10px; }
+  .card h3 { color: var(--amarelo); margin-bottom: 6px; font-size: clamp(1rem, 2.8vw, 1.1rem); }
+  .card small { color: #a89f5a; font-size: clamp(0.72rem, 2.2vw, 0.8rem); }
+
+  /* ============ PAINEL DE EXPLICAÇÃO ============ */
+  .explain {
+    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
+    border-left: 5px solid var(--amarelo);
+    border-radius: 10px;
+    padding: clamp(16px, 3.5vw, 22px);
+    min-height: 90px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    line-height: 1.7;
+  }
+  .explain h3 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1rem, 3vw, 1.15rem); }
+  .explain p { color: #e6e6cc; font-size: clamp(0.85rem, 2.5vw, 0.98rem); }
+  .explain strong { color: var(--amarelo-claro); }
+  .hidden { display: none; }
+
+  /* ============ TOPOLOGIAS ============ */
+  .topo-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: clamp(16px, 3vw, 20px);
+  }
+  .topo-btn {
+    flex: 1 1 auto;
+    min-width: 160px;
+    max-width: 320px;
+    padding: clamp(12px, 2.8vw, 14px) clamp(16px, 3vw, 30px);
+    border: 2px solid var(--amarelo);
+    border-radius: 8px;
+    background: var(--preto);
+    color: var(--amarelo);
+    font-weight: bold;
+    font-size: clamp(0.85rem, 2.6vw, 1rem);
+    cursor: pointer;
+    transition: 0.25s;
+    touch-action: manipulation;
+  }
+  .topo-btn:hover { background: var(--preto-suave); color: var(--amarelo-claro); }
+  .topo-btn.active {
+    background: var(--amarelo);
+    color: #000;
+    box-shadow: var(--sombra-amarela);
+  }
+
+  .topo-panel {
+    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
+    border-radius: var(--raio);
+    padding: clamp(18px, 3.5vw, 24px);
+    border: 2px solid var(--borda);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.35s ease;
+  }
+  .topo-panel h3 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1.05rem, 3vw, 1.2rem); }
+  .topo-panel > p { line-height: 1.7; margin-bottom: 16px; color: #e6e6cc; font-size: clamp(0.85rem, 2.5vw, 0.98rem); }
+
+  .two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2.5vw, 16px);
+  }
+  @media (max-width: 640px) { .two-cols { grid-template-columns: 1fr; } }
+
+  .pros, .cons {
+    border-radius: 10px;
+    padding: clamp(14px, 3vw, 16px);
+    background: #0f0f00;
+  }
+  .pros { border-left: 5px solid var(--verde); }
+  .cons { border-left: 5px solid var(--vermelho); }
+  .pros h4 { color: var(--verde); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); }
+  .cons h4 { color: var(--vermelho); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); }
+  ul { padding-left: clamp(16px, 3vw, 20px); }
+  li { margin-bottom: 6px; line-height: 1.5; color: #e6e6cc; font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
+
+  /* ============ SEÇÃO DE ARTES ============ */
+  .artes {
+    margin-top: clamp(20px, 4vw, 28px);
+    padding: clamp(18px, 4vw, 26px);
+    background: linear-gradient(160deg, #000, var(--preto-suave));
+    border-radius: var(--raio);
+    border: 2px solid var(--amarelo);
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.15);
+  }
+  .artes h2 {
+    color: var(--amarelo);
+    margin-bottom: 8px;
+    font-size: clamp(1.05rem, 3.4vw, 1.3rem);
+    letter-spacing: 0.3px;
+  }
+  .artes > p { color: var(--texto-sec); margin-bottom: clamp(14px, 3vw, 20px); font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
+
+  .artes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: clamp(12px, 2.5vw, 18px);
+  }
+  .arte-card {
+    background: #0f0f00;
+    border-radius: var(--raio);
+    padding: clamp(16px, 3.5vw, 20px);
+    border: 2px solid var(--borda);
+    transition: 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .arte-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--amarelo);
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.25);
+  }
+  .arte-card .arte-visual {
+    height: clamp(90px, 22vw, 120px);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(2.2rem, 8vw, 3rem);
+    background: linear-gradient(135deg, #000, #4d4d00);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--amarelo);
+  }
+  .arte-card .arte-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,204,0,0.07) 20px, rgba(255,204,0,0.07) 22px);
+  }
+  .arte-card h3 { color: var(--amarelo-claro); margin-bottom: 8px; font-size: clamp(0.98rem, 2.8vw, 1.05rem); }
+  .arte-card p { color: var(--texto-sec); font-size: clamp(0.8rem, 2.3vw, 0.88rem); line-height: 1.6; }
+  .arte-card .tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    background: rgba(255, 204, 0, 0.15);
+    border: 1px solid var(--amarelo);
+    border-radius: 12px;
+    font-size: clamp(0.62rem, 1.9vw, 0.7rem);
+    color: var(--amarelo);
+    letter-spacing: 0.4px;
+  }
+
+  /* ============ CTA ============ */
+  .cta {
+    margin-top: clamp(20px, 4vw, 28px);
+    text-align: center;
+    padding: clamp(22px, 5vw, 30px) clamp(16px, 4vw, 20px);
+    background: linear-gradient(135deg, var(--preto-suave), var(--amarelo-escuro));
+    border-radius: var(--raio);
+    border: 2px solid var(--amarelo);
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+  }
+  .cta h2 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1.1rem, 3.6vw, 1.4rem); }
+  .cta p {
+    color: #e6e6cc;
+    margin-bottom: 18px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2.5vw, 0.98rem);
+  }
+  .cta button {
+    width: 100%;
+    max-width: 340px;
+    padding: clamp(13px, 3vw, 14px) clamp(24px, 5vw, 32px);
+    background: var(--amarelo);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: clamp(0.9rem, 2.6vw, 1rem);
+    cursor: pointer;
+    transition: 0.25s;
+    letter-spacing: 0.3px;
+    touch-action: manipulation;
+  }
+  .cta button:hover {
+    background: var(--amarelo-claro);
+    box-shadow: 0 0 22px rgba(255, 204, 0, 0.6);
+    transform: translateY(-2px);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    text-align: center;
+    font-size: clamp(0.72rem, 2.2vw, 0.82rem);
+    color: #a89f5a;
+    margin-top: clamp(20px, 4vw, 26px);
+    padding: clamp(14px, 3vw, 16px);
+    border-top: 1px solid var(--borda);
+    line-height: 1.6;
+  }
+  footer strong { color: var(--amarelo); }
+
+  /* ============ BREAKPOINTS ============ */
+  /* Tablets grandes / landscape pequeno */
+  @media (max-width: 900px) {
+    .artes-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  /* Tablets / phones grandes */
+  @media (max-width: 640px) {
+    .artes-grid { grid-template-columns: 1fr; }
+    .tabs { flex-direction: column; align-items: stretch; }
+    .tab-btn { max-width: none; }
+  }
+  /* Phones pequenos */
+  @media (max-width: 380px) {
+    .cards { grid-template-columns: 1fr; }
+    header h1 { letter-spacing: 0; }
+    .topo-btn { min-width: 100%; }
+  }
+  /* Telas muito largas: limita largura para leitura confortável */
+  @media (min-width: 1400px) {
+    body { max-width: 1360px; margin: 0 auto; }
+  }
+
+  /* Acessibilidade: respeita preferência por menos animação */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Landscape em celular: reduz padding vertical */
+  @media (max-height: 500px) and (orientation: landscape) {
+    header { padding: 14px; }
+    header h1 { font-size: 1.1rem; }
+    .cta { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BCG — Breaking Computation Group</h1>
+  <p class="tagline">Indústria 4.0 · Robótica Industrial · Intralogística Inteligente</p>
+  <span class="badge">GUIA VISUAL DE REDES PARA AUTOMAÇÃO</span>
+</header>
+
+<!-- ABAS -->
+<nav class="tabs" role="tablist" aria-label="Seções do guia">
+  <button class="tab-btn active" data-tab="cabos" role="tab" aria-selected="true" aria-controls="cabos">🔌 Cabos Industriais</button>
+  <button class="tab-btn" data-tab="topologias" role="tab" aria-selected="false" aria-controls="topologias">🕸️ Topologias</button>
+</nav>
+
+<!-- ========== ABA 1: CABOS ========== -->
+<section id="cabos" class="tab-content active" role="tabpanel">
+  <div class="cards">
+    <div class="card" data-cabo="par" role="button" tabindex="0" aria-label="Ver explicação do Par Trançado">
+      <div class="icon">🔗</div>
+      <h3>Par Trançado</h3>
+      <small>Clique para ver onde é usado</small>
+    </div>
+    <div class="card" data-cabo="fibra" role="button" tabindex="0" aria-label="Ver explicação da Fibra Óptica">
+      <div class="icon">💡</div>
+      <h3>Fibra Óptica</h3>
+      <small>Clique para ver onde é usado</small>
+    </div>
+    <div class="card" data-cabo="wireless" role="button" tabindex="0" aria-label="Ver explicação do Wireless">
+      <div class="icon">📶</div>
+      <h3>Wireless</h3>
+      <small>Clique para ver onde é usado</small>
+    </div>
+  </div>
+
+  <div id="explain-par" class="explain hidden">
+    <h3>🔗 Par Trançado na Fábrica Inteligente</h3>
+    <p>É o meio mais comum nas redes industriais Ethernet (PROFINET, EtherNet/IP). Na arquitetura BCG, conecta <strong>CLPs, sensores, IHMs e células robóticas</strong> ao switch de chão de fábrica. Versões blindadas (STP/FTP) são obrigatórias em ambientes com motores e inversores de frequência — caso típico de células de soldagem e paletização. <strong>Ganho BCG:</strong> repetibilidade milimétrica no controle de robôs articulados.</p>
+  </div>
+
+  <div id="explain-fibra" class="explain hidden">
+    <h3>💡 Fibra Óptica no Backbone Industrial</h3>
+    <p>Usada para <strong>longas distâncias e áreas com EMI severa</strong> — entre galpões, perto de fornos e motores de alta potência. Transmite por luz, é imune a ruído elétrico e suporta altíssimas velocidades. Na BCG, é o <em>backbone</em> que interliga células de produção à camada de <strong>IoT e Dashboard Industrial</strong>, garantindo dados de OEE em tempo real sem perda. <strong>Ganho BCG:</strong> integridade total dos dados de manutenção preditiva.</p>
+  </div>
+
+  <div id="explain-wireless" class="explain hidden">
+    <h3>📶 Wireless na Intralogística 4.0</h3>
+    <p>Essencial onde cabo não chega: <strong>frotas de AMRs e AGVs</strong>, empilhadeiras, tablets de manutenção e sensores em partes móveis. Wi-Fi 6 industrial e 5G privado são as escolhas BCG para mobilidade com baixa latência. Exige cuidado com interferência e segurança — não indicado para controle crítico em tempo real. <strong>Ganho BCG:</strong> rastreabilidade total do fluxo de materiais e redução do tempo de ciclo logístico.</p>
+  </div>
+</section>
+
+<!-- ========== ABA 2: TOPOLOGIAS ========== -->
+<section id="topologias" class="tab-content" role="tabpanel">
+  <div class="topo-buttons">
+    <button class="topo-btn active" data-topo="estrela">⭐ Layout em Estrela</button>
+    <button class="topo-btn" data-topo="barramento">➖ Layout em Barramento</button>
+  </div>
+
+  <div id="topo-estrela" class="topo-panel">
+    <h3>⭐ Layout em Estrela — Padrão BCG</h3>
+    <p>Todos os dispositivos (CLPs, sensores, IHMs, células robóticas) se conectam a um <strong>switch industrial central</strong>. É a topologia padrão das redes Ethernet industriais modernas (PROFINET, EtherNet/IP) e a base da arquitetura BCG para fábricas inteligentes. Se um ramal falha, apenas aquele dispositivo cai — o restante da planta continua operando.</p>
+    <div class="two-cols">
+      <div class="pros">
+        <h4>✔ Vantagens</h4>
+        <ul>
+          <li>Falha em um ramal não derruba a rede toda</li>
+          <li>Fácil diagnóstico e expansão modular</li>
+          <li>Suporta altas velocidades e full-duplex</li>
+          <li>Padrão das redes Ethernet industriais</li>
+          <li>Compatível com Digital Twins e IoT</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <h4>✘ Desvantagens</h4>
+        <ul>
+          <li>Depende do switch central (ponto único de falha)</li>
+          <li>Mais cabos (um por dispositivo)</li>
+          <li>Custo maior com switch industrial gerenciável</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="topo-barramento" class="topo-panel hidden">
+    <h3>➖ Layout em Barramento — Legado Fieldbus</h3>
+    <p>Todos os dispositivos compartilham um <strong>único cabo principal (barramento)</strong>. Clássica em redes fieldbus antigas (PROFIBUS, AS-i). Simples e barata, mas um rompimento no cabo principal pode derrubar toda a rede — risco inaceitável em células de produção críticas. A BCG recomenda migração para estrela/Ethernet em projetos de modernização.</p>
+    <div class="two-cols">
+      <div class="pros">
+        <h4>✔ Vantagens</h4>
+        <ul>
+          <li>Menos cabeamento e custo menor</li>
+          <li>Instalação simples em linha</li>
+          <li>Boa para poucos dispositivos próximos</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <h4>✘ Desvantagens</h4>
+        <ul>
+          <li>Rompimento do cabo derruba toda a rede</li>
+          <li>Difícil localizar falhas</li>
+          <li>Colisões e baixa velocidade</li>
+          <li>Expansão limitada</li>
+          <li>Incompatível com requisitos de OEE em tempo real</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SEÇÃO DE ARTES ========== -->
+<section class="artes">
+  <h2>🎨 Artes Visuais — Pilares de Solução BCG</h2>
+  <p>Representações visuais dos três pilares que sustentam a arquitetura fabril inteligente da BCG.</p>
+
+  <div class="artes-grid">
+    <div class="arte-card">
+      <div class="arte-visual">🦾</div>
+      <h3>Robótica de Produção</h3>
+      <p>Células robotizadas de soldagem, montagem e paletização com repetibilidade milimétrica e integração total à rede industrial.</p>
+      <span class="tag">CHÃO DE FÁBRICA MECÂNICO</span>
+    </div>
+
+    <div class="arte-card">
+      <div class="arte-visual">🤖</div>
+      <h3>Intralogística 4.0</h3>
+      <p>Frotas de AMRs e AGVs, armazenamento automatizado e sorting inteligente para fluxo contínuo de materiais.</p>
+      <span class="tag">LOGÍSTICA INTERNA</span>
+    </div>
+
+    <div class="arte-card">
+      <div class="arte-visual">🧠</div>
+      <h3>Ecossistema Indústria 4.0</h3>
+      <p>Digital Twins, visão computacional, IoT e dashboards de OEE com manutenção preditiva em tempo real.</p>
+      <span class="tag">COMPUTAÇÃO APLICADA</span>
+    </div>
+
+    <div class="arte-card">
+      <div class="arte-visual">🌐</div>
+      <h3>Arquitetura de Rede</h3>
+      <p>Backbone em fibra, par trançado blindado e wireless industrial — a espinha dorsal que conecta todos os pilares.</p>
+      <span class="tag">INFRAESTRUTURA</span>
+    </div>
+
+    <div class="arte-card">
+      <div class="arte-visual">📊</div>
+      <h3>Dashboard Industrial</h3>
+      <p>Monitoramento de OEE, manutenção preditiva e rastreabilidade total alimentados pela rede industrial.</p>
+      <span class="tag">DADOS & ANALYTICS</span>
+    </div>
+
+    <div class="arte-card">
+      <div class="arte-visual">🔬</div>
+      <h3>Gêmeos Digitais</h3>
+      <p>Simulação 3D prévia de células robóticas e linhas logísticas para validação sem parada de planta.</p>
+      <span class="tag">SIMULAÇÃO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta">
+  <h2>Pronto para transformar sua planta?</h2>
+  <p>A BCG diagnostica gargalos produtivos e logísticos e apresenta a arquitetura de automação ideal para sua operação. Agende uma reunião de engenharia de aplicação.</p>
+  <button onclick="alert('Entre em contato com a engenharia BCG para agendar um diagnóstico técnico da sua planta.')">Agendar Diagnóstico BCG</button>
+</section>
+
+<footer>
+  <strong>BCG — Breaking Computation Group</strong> · Indústria 4.0 & Robótica Industrial<br>
+  Guia Visual de Redes para Automação · Atividade Didática
+</footer>
+
+<script>
+  // ---- Abas ----
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---- Cards de cabos (clique + teclado para acessibilidade) ----
+  const cards = document.querySelectorAll('.card');
+  function selecionarCabo(card) {
+    cards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.querySelectorAll('.explain').forEach(e => e.classList.add('hidden'));
+    document.getElementById('explain-' + card.dataset.cabo).classList.remove('hidden');
+  }
+  cards.forEach(card => {
+    card.addEventListener('click', () => selecionarCabo(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selecionarCabo(card);
+      }
+    });
+  });
+
+  // ---- Botões de topologia ----
+  const topoBtns = document.querySelectorAll('.topo-btn');
+  topoBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      topoBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('topo-estrela').classList.add('hidden');
+      document.getElementById('topo-barramento').classList.add('hidden');
+      document.getElementById('topo-' + btn.dataset.topo).classList.remove('hidden');
+    });
+  });
+</script>
+</body>
+</html>

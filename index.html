@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,26 +7,25 @@
 <meta name="theme-color" content="#ffffff">
 <title>BCG — Breaking Computation Group | Redes para Automação</title>
 <style>
-  /* ============ RESET & VARIÁVEIS ============ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --branco: #ffffff;
     --branco-suave: #f7f7f2;
-    --cinza-claro: #eeeeea;
-    --cinza-borda: #dcdcd2;
+    --cinza-claro: #efefe8;
+    --cinza-borda: #d8d8cc;
     --preto: #0d0d0d;
-    --preto-suave: #1a1a1a;
+    --preto-suave: #1f1f1f;
     --amarelo: #ffcc00;
     --amarelo-escuro: #e6b800;
-    --amarelo-claro: #fff4c2;
+    --amarelo-claro: #fff8d6;
     --texto: #111111;
-    --texto-sec: #4a4a4a;
+    --texto-sec: #555555;
     --verde: #1f8a3b;
     --vermelho: #c0392b;
     --raio: 14px;
-    --sombra: 0 8px 28px rgba(0, 0, 0, 0.08);
-    --sombra-hover: 0 12px 34px rgba(0, 0, 0, 0.14);
+    --sombra: 0 6px 22px rgba(0,0,0,0.08);
+    --sombra-hover: 0 12px 32px rgba(0,0,0,0.14);
   }
 
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -46,7 +46,7 @@
   /* ============ HEADER ============ */
   header {
     text-align: center;
-    padding: clamp(28px, 5vw, 44px) clamp(14px, 4vw, 24px);
+    padding: clamp(26px, 5vw, 40px) clamp(14px, 4vw, 24px);
     background: var(--preto);
     border-radius: var(--raio);
     margin-bottom: clamp(18px, 3vw, 24px);
@@ -67,11 +67,11 @@
   @keyframes scan { from { transform: translate(0,0); } to { transform: translate(80px,80px); } }
 
   header .logo-robot {
-    width: clamp(56px, 12vw, 76px);
+    width: clamp(60px, 13vw, 82px);
     margin: 0 auto 14px;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 0 16px rgba(255, 204, 0, 0.55));
+    filter: drop-shadow(0 0 16px rgba(255,204,0,0.55));
   }
   header h1 {
     font-size: clamp(1.2rem, 4.4vw, 2rem);
@@ -79,13 +79,13 @@
     position: relative;
     z-index: 1;
     color: var(--amarelo);
-    text-shadow: 0 0 18px rgba(255, 204, 0, 0.35);
+    text-shadow: 0 0 18px rgba(255,204,0,0.35);
     word-wrap: break-word;
     font-weight: 800;
   }
   header .tagline {
     font-size: clamp(0.74rem, 2.4vw, 0.92rem);
-    color: #d8d8c8;
+    color: #e0e0d0;
     margin-top: 8px;
     position: relative;
     z-index: 1;
@@ -137,7 +137,7 @@
     background: var(--preto);
     color: var(--amarelo);
     border-color: var(--preto);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   }
 
   .tab-content { display: none; animation: fadeIn 0.35s ease; }
@@ -185,7 +185,7 @@
   .card.selected {
     border-color: var(--preto);
     background: var(--amarelo-claro);
-    box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(255,204,0,0.4);
   }
   .card .icon-svg {
     width: clamp(56px, 14vw, 72px);
@@ -237,7 +237,7 @@
   .topo-btn.active {
     background: var(--preto);
     color: var(--amarelo);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   }
 
   .topo-panel {
@@ -299,7 +299,7 @@
     position: relative;
     z-index: 1;
   }
-  .artes > p { color: #d8d8c8; margin-bottom: clamp(16px, 3vw, 22px); font-size: clamp(0.84rem, 2.4vw, 0.96rem); position: relative; z-index: 1; }
+  .artes > p { color: #e0e0d0; margin-bottom: clamp(16px, 3vw, 22px); font-size: clamp(0.84rem, 2.4vw, 0.96rem); position: relative; z-index: 1; }
 
   .artes-grid {
     display: grid;
@@ -319,11 +319,11 @@
   }
   .arte-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 34px rgba(255, 204, 0, 0.35);
+    box-shadow: 0 12px 34px rgba(255,204,0,0.35);
     border-color: var(--amarelo-escuro);
   }
   .arte-card .arte-visual {
-    height: clamp(110px, 24vw, 140px);
+    height: clamp(120px, 25vw, 150px);
     border-radius: 10px;
     margin-bottom: 14px;
     display: flex;
@@ -341,11 +341,11 @@
     background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,204,0,0.08) 18px, rgba(255,204,0,0.08) 20px);
   }
   .arte-card .arte-visual svg {
-    width: clamp(72px, 18vw, 96px);
-    height: clamp(72px, 18vw, 96px);
+    width: clamp(80px, 20vw, 110px);
+    height: clamp(80px, 20vw, 110px);
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+    filter: drop-shadow(0 0 10px rgba(255,204,0,0.5));
   }
   .arte-card h3 { color: var(--preto); margin-bottom: 8px; font-size: clamp(0.98rem, 2.8vw, 1.08rem); font-weight: 800; }
   .arte-card p { color: var(--texto-sec); font-size: clamp(0.8rem, 2.3vw, 0.9rem); line-height: 1.6; }
@@ -401,7 +401,7 @@
   .cta button:hover {
     background: var(--preto-suave);
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.3);
   }
 
   /* ============ FOOTER ============ */
@@ -437,11 +437,6 @@
       scroll-behavior: auto !important;
     }
   }
-  @media (max-height: 500px) and (orientation: landscape) {
-    header { padding: 16px; }
-    header h1 { font-size: 1.1rem; }
-    .cta { padding: 18px; }
-  }
 </style>
 </head>
 <body>
@@ -449,32 +444,18 @@
 <header>
   <!-- Robô industrial SVG preto/amarelo -->
   <svg class="logo-robot" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-      <linearGradient id="gradRobo" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#ffcc00"/>
-        <stop offset="100%" stop-color="#e6b800"/>
-      </linearGradient>
-    </defs>
-    <!-- base -->
     <rect x="30" y="80" width="40" height="10" rx="3" fill="#ffcc00"/>
     <rect x="35" y="72" width="30" height="10" rx="3" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <!-- corpo -->
     <rect x="38" y="46" width="24" height="28" rx="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
     <rect x="44" y="52" width="12" height="6" rx="1.5" fill="#ffcc00"/>
-    <!-- braço esquerdo -->
     <rect x="26" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(-15 31 59)"/>
     <circle cx="26" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <!-- braço direito -->
     <rect x="64" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(15 69 59)"/>
     <circle cx="74" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <!-- cabeça -->
     <rect x="36" y="22" width="28" height="22" rx="5" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-    <!-- olhos -->
     <circle cx="44" cy="32" r="3.5" fill="#ffcc00"/>
     <circle cx="56" cy="32" r="3.5" fill="#ffcc00"/>
-    <!-- boca / sensor -->
     <rect x="45" y="38" width="10" height="3" rx="1.5" fill="#ffcc00"/>
-    <!-- antena -->
     <line x1="50" y1="22" x2="50" y2="14" stroke="#ffcc00" stroke-width="2.5" stroke-linecap="round"/>
     <circle cx="50" cy="12" r="3" fill="#ffcc00"/>
   </svg>
@@ -484,7 +465,6 @@
   <span class="badge">Guia Visual de Redes para Automação</span>
 </header>
 
-<!-- ABAS -->
 <nav class="tabs" role="tablist" aria-label="Seções do guia">
   <button class="tab-btn active" data-tab="cabos" role="tab" aria-selected="true" aria-controls="cabos">🔌 Cabos Industriais</button>
   <button class="tab-btn" data-tab="topologias" role="tab" aria-selected="false" aria-controls="topologias">🕸️ Topologias</button>
@@ -495,7 +475,6 @@
   <div class="cards">
     <div class="card" data-cabo="par" role="button" tabindex="0" aria-label="Ver explicação do Par Trançado">
       <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Cabo par trançado -->
         <rect x="20" y="20" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
         <rect x="20" y="42" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
         <rect x="20" y="64" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
@@ -508,7 +487,6 @@
     </div>
     <div class="card" data-cabo="fibra" role="button" tabindex="0" aria-label="Ver explicação da Fibra Óptica">
       <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Fibra óptica -->
         <rect x="15" y="35" width="70" height="30" rx="15" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
         <circle cx="35" cy="50" r="7" fill="#ffcc00"/>
         <circle cx="50" cy="50" r="7" fill="#ffcc00" opacity="0.85"/>
@@ -520,7 +498,6 @@
     </div>
     <div class="card" data-cabo="wireless" role="button" tabindex="0" aria-label="Ver explicação do Wireless">
       <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Wireless -->
         <circle cx="50" cy="70" r="6" fill="#ffcc00"/>
         <path d="M35 58 Q 50 44, 65 58" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
         <path d="M26 48 Q 50 26, 74 48" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
@@ -605,4 +582,19 @@
   </div>
 </section>
 
-<!-- ========== SEÇÃO DE ARTES =
+<!-- ========== SEÇÃO DE ARTES ========== -->
+<section class="artes">
+  <h2>🎨 Pilares de Solução BCG</h2>
+  <p>Representações visuais dos pilares que sustentam a arquitetura fabril inteligente da BCG.</p>
+
+  <div class="artes-grid">
+    <div class="arte-card">
+      <div class="arte-visual">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="30" y="80" width="40" height="10" rx="3" fill="#ffcc00"/>
+          <rect x="35" y="72" width="30" height="10" rx="3" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
+          <rect x="38" y="46" width="24" height="28" rx="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+          <rect x="44" y="52" width="12" height="6" rx="1.5" fill="#ffcc00"/>
+          <
+
+

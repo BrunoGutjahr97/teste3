@@ -3,127 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#ffffff">
 <title>BCG — Breaking Computation Group | Redes para Automação</title>
 <style>
-  /* ============ RESET & BASE ============ */
+  /* ============ RESET & VARIÁVEIS ============ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --preto: #0a0a0a;
-    --preto-card: #141400;
-    --preto-suave: #1a1a00;
+    --branco: #ffffff;
+    --branco-suave: #f7f7f2;
+    --cinza-claro: #eeeeea;
+    --cinza-borda: #dcdcd2;
+    --preto: #0d0d0d;
+    --preto-suave: #1a1a1a;
     --amarelo: #ffcc00;
-    --amarelo-claro: #ffe066;
-    --amarelo-escuro: #333300;
-    --texto: #f5f5f5;
-    --texto-sec: #d4c97a;
-    --verde: #66ff66;
-    --vermelho: #ff4d4d;
-    --borda: #333300;
-    --raio: 12px;
-    --sombra-amarela: 0 0 24px rgba(255, 204, 0, 0.35);
+    --amarelo-escuro: #e6b800;
+    --amarelo-claro: #fff4c2;
+    --texto: #111111;
+    --texto-sec: #4a4a4a;
+    --verde: #1f8a3b;
+    --vermelho: #c0392b;
+    --raio: 14px;
+    --sombra: 0 8px 28px rgba(0, 0, 0, 0.08);
+    --sombra-hover: 0 12px 34px rgba(0, 0, 0, 0.14);
   }
 
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
   body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--preto);
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
+    background: var(--branco);
     color: var(--texto);
     min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.55;
     padding: clamp(10px, 2vw, 20px);
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
   }
 
-  img, svg { max-width: 100%; height: auto; display: block; }
+  img, svg { max-width: 100%; display: block; }
 
   /* ============ HEADER ============ */
   header {
     text-align: center;
-    padding: clamp(20px, 5vw, 34px) clamp(14px, 4vw, 24px);
-    background: linear-gradient(135deg, #000 0%, #1a1a00 50%, #333300 100%);
+    padding: clamp(28px, 5vw, 44px) clamp(14px, 4vw, 24px);
+    background: var(--preto);
     border-radius: var(--raio);
-    margin-bottom: clamp(16px, 3vw, 22px);
-    border: 2px solid var(--amarelo);
-    box-shadow: 0 0 30px rgba(255, 204, 0, 0.2);
+    margin-bottom: clamp(18px, 3vw, 24px);
+    border: 3px solid var(--amarelo);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--sombra);
   }
   header::before {
     content: "";
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,204,0,0.04) 40px, rgba(255,204,0,0.04) 80px);
-    animation: scan 20s linear infinite;
+    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,204,0,0.06) 40px, rgba(255,204,0,0.06) 80px);
+    animation: scan 24s linear infinite;
     pointer-events: none;
   }
   @keyframes scan { from { transform: translate(0,0); } to { transform: translate(80px,80px); } }
 
+  header .logo-robot {
+    width: clamp(56px, 12vw, 76px);
+    margin: 0 auto 14px;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 16px rgba(255, 204, 0, 0.55));
+  }
   header h1 {
-    font-size: clamp(1.15rem, 4.5vw, 1.9rem);
+    font-size: clamp(1.2rem, 4.4vw, 2rem);
     letter-spacing: 0.5px;
     position: relative;
     z-index: 1;
     color: var(--amarelo);
-    text-shadow: 0 0 18px rgba(255, 204, 0, 0.5);
+    text-shadow: 0 0 18px rgba(255, 204, 0, 0.35);
     word-wrap: break-word;
+    font-weight: 800;
   }
   header .tagline {
-    font-size: clamp(0.72rem, 2.4vw, 0.9rem);
-    color: var(--texto-sec);
+    font-size: clamp(0.74rem, 2.4vw, 0.92rem);
+    color: #d8d8c8;
     margin-top: 8px;
     position: relative;
     z-index: 1;
     line-height: 1.4;
+    letter-spacing: 0.4px;
   }
   header .badge {
     display: inline-block;
-    margin-top: 12px;
-    padding: 5px clamp(10px, 3vw, 14px);
-    background: rgba(255, 204, 0, 0.15);
-    border: 1px solid var(--amarelo);
+    margin-top: 14px;
+    padding: 6px clamp(12px, 3vw, 16px);
+    background: var(--amarelo);
     border-radius: 20px;
-    font-size: clamp(0.6rem, 2vw, 0.75rem);
-    color: var(--amarelo);
+    font-size: clamp(0.62rem, 2vw, 0.76rem);
+    color: var(--preto);
     position: relative;
     z-index: 1;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
-  /* ============ TABS (com scroll horizontal no mobile) ============ */
+  /* ============ TABS ============ */
   .tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: clamp(16px, 3vw, 20px);
+    margin-bottom: clamp(16px, 3vw, 22px);
     justify-content: center;
     flex-wrap: wrap;
   }
   .tab-btn {
     flex: 1 1 auto;
-    min-width: 140px;
-    max-width: 280px;
-    padding: clamp(11px, 2.5vw, 13px) clamp(14px, 3vw, 26px);
-    border: 2px solid var(--amarelo);
-    border-radius: 8px;
-    background: var(--preto);
-    color: var(--amarelo);
-    font-weight: bold;
+    min-width: 150px;
+    max-width: 300px;
+    padding: clamp(12px, 2.5vw, 14px) clamp(16px, 3vw, 28px);
+    border: 2px solid var(--preto);
+    border-radius: 10px;
+    background: var(--branco);
+    color: var(--preto);
+    font-weight: 800;
     cursor: pointer;
     font-size: clamp(0.85rem, 2.6vw, 1rem);
-    transition: 0.25s;
+    transition: 0.22s;
     letter-spacing: 0.3px;
     touch-action: manipulation;
     white-space: nowrap;
   }
-  .tab-btn:hover { background: var(--preto-suave); color: var(--amarelo-claro); }
+  .tab-btn:hover { background: var(--amarelo-claro); }
   .tab-btn.active {
-    background: var(--amarelo);
-    color: #000;
-    box-shadow: var(--sombra-amarela);
+    background: var(--preto);
+    color: var(--amarelo);
+    border-color: var(--preto);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   }
 
   .tab-content { display: none; animation: fadeIn 0.35s ease; }
@@ -134,56 +148,66 @@
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-    gap: clamp(12px, 2.5vw, 16px);
-    margin-bottom: clamp(16px, 3vw, 20px);
+    gap: clamp(12px, 2.5vw, 18px);
+    margin-bottom: clamp(16px, 3vw, 22px);
   }
   .card {
-    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
+    background: var(--branco);
     border-radius: var(--raio);
-    padding: clamp(18px, 3.5vw, 22px);
+    padding: clamp(18px, 3.5vw, 24px);
     cursor: pointer;
-    border: 2px solid var(--borda);
+    border: 2px solid var(--cinza-borda);
     transition: 0.25s;
     text-align: center;
     position: relative;
     overflow: hidden;
     touch-action: manipulation;
+    box-shadow: var(--sombra);
   }
   .card::after {
     content: "";
     position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(255,204,0,0.08), transparent 60%);
-    pointer-events: none;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--amarelo);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
   }
+  .card:hover::after, .card.selected::after { transform: scaleX(1); }
+
   .card:hover, .card:focus-visible {
-    transform: translateY(-4px);
-    border-color: var(--amarelo);
-    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.25);
+    transform: translateY(-5px);
+    border-color: var(--preto);
+    box-shadow: var(--sombra-hover);
     outline: none;
   }
   .card.selected {
-    border-color: var(--amarelo);
-    background: linear-gradient(160deg, var(--amarelo-escuro), #4d4d00);
-    box-shadow: 0 0 24px rgba(255, 204, 0, 0.55);
+    border-color: var(--preto);
+    background: var(--amarelo-claro);
+    box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
   }
-  .card .icon { font-size: clamp(2rem, 6vw, 2.5rem); margin-bottom: 10px; }
-  .card h3 { color: var(--amarelo); margin-bottom: 6px; font-size: clamp(1rem, 2.8vw, 1.1rem); }
-  .card small { color: #a89f5a; font-size: clamp(0.72rem, 2.2vw, 0.8rem); }
+  .card .icon-svg {
+    width: clamp(56px, 14vw, 72px);
+    height: clamp(56px, 14vw, 72px);
+    margin: 0 auto 12px;
+  }
+  .card h3 { color: var(--preto); margin-bottom: 6px; font-size: clamp(1rem, 2.8vw, 1.12rem); font-weight: 800; }
+  .card small { color: var(--texto-sec); font-size: clamp(0.72rem, 2.2vw, 0.8rem); }
 
   /* ============ PAINEL DE EXPLICAÇÃO ============ */
   .explain {
-    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
-    border-left: 5px solid var(--amarelo);
+    background: var(--branco-suave);
+    border-left: 6px solid var(--amarelo);
     border-radius: 10px;
-    padding: clamp(16px, 3.5vw, 22px);
+    padding: clamp(18px, 3.5vw, 24px);
     min-height: 90px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--sombra);
     line-height: 1.7;
   }
-  .explain h3 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1rem, 3vw, 1.15rem); }
-  .explain p { color: #e6e6cc; font-size: clamp(0.85rem, 2.5vw, 0.98rem); }
-  .explain strong { color: var(--amarelo-claro); }
+  .explain h3 { color: var(--preto); margin-bottom: 10px; font-size: clamp(1rem, 3vw, 1.18rem); font-weight: 800; }
+  .explain p { color: var(--texto); font-size: clamp(0.86rem, 2.5vw, 0.98rem); }
+  .explain strong { color: var(--preto); background: var(--amarelo); padding: 1px 5px; border-radius: 4px; }
   .hidden { display: none; }
 
   /* ============ TOPOLOGIAS ============ */
@@ -192,205 +216,219 @@
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: clamp(16px, 3vw, 20px);
+    margin-bottom: clamp(16px, 3vw, 22px);
   }
   .topo-btn {
     flex: 1 1 auto;
     min-width: 160px;
     max-width: 320px;
-    padding: clamp(12px, 2.8vw, 14px) clamp(16px, 3vw, 30px);
-    border: 2px solid var(--amarelo);
-    border-radius: 8px;
-    background: var(--preto);
-    color: var(--amarelo);
-    font-weight: bold;
+    padding: clamp(12px, 2.8vw, 15px) clamp(16px, 3vw, 30px);
+    border: 2px solid var(--preto);
+    border-radius: 10px;
+    background: var(--branco);
+    color: var(--preto);
+    font-weight: 800;
     font-size: clamp(0.85rem, 2.6vw, 1rem);
     cursor: pointer;
-    transition: 0.25s;
+    transition: 0.22s;
     touch-action: manipulation;
   }
-  .topo-btn:hover { background: var(--preto-suave); color: var(--amarelo-claro); }
+  .topo-btn:hover { background: var(--amarelo-claro); }
   .topo-btn.active {
-    background: var(--amarelo);
-    color: #000;
-    box-shadow: var(--sombra-amarela);
+    background: var(--preto);
+    color: var(--amarelo);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   }
 
   .topo-panel {
-    background: linear-gradient(160deg, var(--preto), var(--preto-suave));
+    background: var(--branco);
     border-radius: var(--raio);
-    padding: clamp(18px, 3.5vw, 24px);
-    border: 2px solid var(--borda);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    padding: clamp(20px, 3.5vw, 26px);
+    border: 2px solid var(--cinza-borda);
+    box-shadow: var(--sombra);
     animation: fadeIn 0.35s ease;
   }
-  .topo-panel h3 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1.05rem, 3vw, 1.2rem); }
-  .topo-panel > p { line-height: 1.7; margin-bottom: 16px; color: #e6e6cc; font-size: clamp(0.85rem, 2.5vw, 0.98rem); }
+  .topo-panel h3 { color: var(--preto); margin-bottom: 12px; font-size: clamp(1.05rem, 3vw, 1.22rem); font-weight: 800; }
+  .topo-panel > p { line-height: 1.7; margin-bottom: 18px; color: var(--texto); font-size: clamp(0.86rem, 2.5vw, 0.98rem); }
+  .topo-panel strong { background: var(--amarelo); padding: 1px 5px; border-radius: 4px; }
 
   .two-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(12px, 2.5vw, 16px);
+    gap: clamp(12px, 2.5vw, 18px);
   }
   @media (max-width: 640px) { .two-cols { grid-template-columns: 1fr; } }
 
   .pros, .cons {
     border-radius: 10px;
-    padding: clamp(14px, 3vw, 16px);
-    background: #0f0f00;
+    padding: clamp(14px, 3vw, 18px);
+    background: var(--branco-suave);
   }
   .pros { border-left: 5px solid var(--verde); }
   .cons { border-left: 5px solid var(--vermelho); }
-  .pros h4 { color: var(--verde); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); }
-  .cons h4 { color: var(--vermelho); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); }
+  .pros h4 { color: var(--verde); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); font-weight: 800; }
+  .cons h4 { color: var(--vermelho); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); font-weight: 800; }
   ul { padding-left: clamp(16px, 3vw, 20px); }
-  li { margin-bottom: 6px; line-height: 1.5; color: #e6e6cc; font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
+  li { margin-bottom: 6px; line-height: 1.5; color: var(--texto); font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
 
   /* ============ SEÇÃO DE ARTES ============ */
   .artes {
-    margin-top: clamp(20px, 4vw, 28px);
-    padding: clamp(18px, 4vw, 26px);
-    background: linear-gradient(160deg, #000, var(--preto-suave));
+    margin-top: clamp(24px, 4vw, 34px);
+    padding: clamp(20px, 4vw, 30px);
+    background: var(--preto);
     border-radius: var(--raio);
-    border: 2px solid var(--amarelo);
-    box-shadow: 0 0 30px rgba(255, 204, 0, 0.15);
+    border: 3px solid var(--amarelo);
+    box-shadow: var(--sombra);
+    position: relative;
+    overflow: hidden;
+  }
+  .artes::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(255,204,0,0.15), transparent 70%);
+    pointer-events: none;
   }
   .artes h2 {
     color: var(--amarelo);
     margin-bottom: 8px;
-    font-size: clamp(1.05rem, 3.4vw, 1.3rem);
+    font-size: clamp(1.1rem, 3.4vw, 1.38rem);
     letter-spacing: 0.3px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
   }
-  .artes > p { color: var(--texto-sec); margin-bottom: clamp(14px, 3vw, 20px); font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
+  .artes > p { color: #d8d8c8; margin-bottom: clamp(16px, 3vw, 22px); font-size: clamp(0.84rem, 2.4vw, 0.96rem); position: relative; z-index: 1; }
 
   .artes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-    gap: clamp(12px, 2.5vw, 18px);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: clamp(14px, 2.5vw, 18px);
+    position: relative;
+    z-index: 1;
   }
   .arte-card {
-    background: #0f0f00;
+    background: var(--branco);
     border-radius: var(--raio);
-    padding: clamp(16px, 3.5vw, 20px);
-    border: 2px solid var(--borda);
+    padding: clamp(16px, 3.5vw, 22px);
+    border: 2px solid var(--amarelo);
     transition: 0.25s;
     position: relative;
     overflow: hidden;
   }
   .arte-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--amarelo);
-    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 34px rgba(255, 204, 0, 0.35);
+    border-color: var(--amarelo-escuro);
   }
   .arte-card .arte-visual {
-    height: clamp(90px, 22vw, 120px);
-    border-radius: 8px;
+    height: clamp(110px, 24vw, 140px);
+    border-radius: 10px;
     margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(2.2rem, 8vw, 3rem);
-    background: linear-gradient(135deg, #000, #4d4d00);
+    background: linear-gradient(135deg, var(--preto) 0%, #2a2a1a 100%);
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--amarelo);
+    border: 2px solid var(--amarelo);
   }
   .arte-card .arte-visual::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,204,0,0.07) 20px, rgba(255,204,0,0.07) 22px);
+    background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,204,0,0.08) 18px, rgba(255,204,0,0.08) 20px);
   }
-  .arte-card h3 { color: var(--amarelo-claro); margin-bottom: 8px; font-size: clamp(0.98rem, 2.8vw, 1.05rem); }
-  .arte-card p { color: var(--texto-sec); font-size: clamp(0.8rem, 2.3vw, 0.88rem); line-height: 1.6; }
+  .arte-card .arte-visual svg {
+    width: clamp(72px, 18vw, 96px);
+    height: clamp(72px, 18vw, 96px);
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+  }
+  .arte-card h3 { color: var(--preto); margin-bottom: 8px; font-size: clamp(0.98rem, 2.8vw, 1.08rem); font-weight: 800; }
+  .arte-card p { color: var(--texto-sec); font-size: clamp(0.8rem, 2.3vw, 0.9rem); line-height: 1.6; }
   .arte-card .tag {
     display: inline-block;
-    margin-top: 10px;
-    padding: 3px 10px;
-    background: rgba(255, 204, 0, 0.15);
-    border: 1px solid var(--amarelo);
+    margin-top: 12px;
+    padding: 4px 11px;
+    background: var(--preto);
     border-radius: 12px;
-    font-size: clamp(0.62rem, 1.9vw, 0.7rem);
+    font-size: clamp(0.62rem, 1.9vw, 0.72rem);
     color: var(--amarelo);
-    letter-spacing: 0.4px;
+    letter-spacing: 0.5px;
+    font-weight: 800;
   }
 
   /* ============ CTA ============ */
   .cta {
-    margin-top: clamp(20px, 4vw, 28px);
+    margin-top: clamp(24px, 4vw, 34px);
     text-align: center;
-    padding: clamp(22px, 5vw, 30px) clamp(16px, 4vw, 20px);
-    background: linear-gradient(135deg, var(--preto-suave), var(--amarelo-escuro));
+    padding: clamp(26px, 5vw, 38px) clamp(16px, 4vw, 24px);
+    background: linear-gradient(135deg, var(--amarelo) 0%, var(--amarelo-escuro) 100%);
     border-radius: var(--raio);
-    border: 2px solid var(--amarelo);
-    box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+    border: 3px solid var(--preto);
+    box-shadow: var(--sombra);
+    position: relative;
+    overflow: hidden;
   }
-  .cta h2 { color: var(--amarelo); margin-bottom: 10px; font-size: clamp(1.1rem, 3.6vw, 1.4rem); }
+  .cta h2 { color: var(--preto); margin-bottom: 12px; font-size: clamp(1.15rem, 3.6vw, 1.5rem); font-weight: 800; }
   .cta p {
-    color: #e6e6cc;
-    margin-bottom: 18px;
+    color: var(--preto);
+    margin-bottom: 20px;
     max-width: 640px;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.6;
-    font-size: clamp(0.85rem, 2.5vw, 0.98rem);
+    font-size: clamp(0.88rem, 2.5vw, 1rem);
   }
   .cta button {
     width: 100%;
     max-width: 340px;
-    padding: clamp(13px, 3vw, 14px) clamp(24px, 5vw, 32px);
-    background: var(--amarelo);
-    color: #000;
+    padding: clamp(13px, 3vw, 15px) clamp(24px, 5vw, 34px);
+    background: var(--preto);
+    color: var(--amarelo);
     border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 10px;
+    font-weight: 800;
     font-size: clamp(0.9rem, 2.6vw, 1rem);
     cursor: pointer;
-    transition: 0.25s;
-    letter-spacing: 0.3px;
+    transition: 0.22s;
+    letter-spacing: 0.4px;
     touch-action: manipulation;
   }
   .cta button:hover {
-    background: var(--amarelo-claro);
-    box-shadow: 0 0 22px rgba(255, 204, 0, 0.6);
+    background: var(--preto-suave);
     transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   }
 
   /* ============ FOOTER ============ */
   footer {
     text-align: center;
-    font-size: clamp(0.72rem, 2.2vw, 0.82rem);
-    color: #a89f5a;
-    margin-top: clamp(20px, 4vw, 26px);
-    padding: clamp(14px, 3vw, 16px);
-    border-top: 1px solid var(--borda);
+    font-size: clamp(0.74rem, 2.2vw, 0.84rem);
+    color: var(--texto-sec);
+    margin-top: clamp(22px, 4vw, 30px);
+    padding: clamp(16px, 3vw, 20px);
+    border-top: 3px solid var(--amarelo);
     line-height: 1.6;
   }
-  footer strong { color: var(--amarelo); }
+  footer strong { color: var(--preto); }
 
   /* ============ BREAKPOINTS ============ */
-  /* Tablets grandes / landscape pequeno */
-  @media (max-width: 900px) {
-    .artes-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  /* Tablets / phones grandes */
+  @media (max-width: 900px) { .artes-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) {
     .artes-grid { grid-template-columns: 1fr; }
     .tabs { flex-direction: column; align-items: stretch; }
     .tab-btn { max-width: none; }
   }
-  /* Phones pequenos */
   @media (max-width: 380px) {
     .cards { grid-template-columns: 1fr; }
-    header h1 { letter-spacing: 0; }
     .topo-btn { min-width: 100%; }
   }
-  /* Telas muito largas: limita largura para leitura confortável */
-  @media (min-width: 1400px) {
-    body { max-width: 1360px; margin: 0 auto; }
-  }
+  @media (min-width: 1400px) { body { max-width: 1360px; margin: 0 auto; } }
 
-  /* Acessibilidade: respeita preferência por menos animação */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -399,21 +437,51 @@
       scroll-behavior: auto !important;
     }
   }
-
-  /* Landscape em celular: reduz padding vertical */
   @media (max-height: 500px) and (orientation: landscape) {
-    header { padding: 14px; }
+    header { padding: 16px; }
     header h1 { font-size: 1.1rem; }
-    .cta { padding: 16px; }
+    .cta { padding: 18px; }
   }
 </style>
 </head>
 <body>
 
 <header>
+  <!-- Robô industrial SVG preto/amarelo -->
+  <svg class="logo-robot" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="gradRobo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffcc00"/>
+        <stop offset="100%" stop-color="#e6b800"/>
+      </linearGradient>
+    </defs>
+    <!-- base -->
+    <rect x="30" y="80" width="40" height="10" rx="3" fill="#ffcc00"/>
+    <rect x="35" y="72" width="30" height="10" rx="3" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
+    <!-- corpo -->
+    <rect x="38" y="46" width="24" height="28" rx="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+    <rect x="44" y="52" width="12" height="6" rx="1.5" fill="#ffcc00"/>
+    <!-- braço esquerdo -->
+    <rect x="26" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(-15 31 59)"/>
+    <circle cx="26" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
+    <!-- braço direito -->
+    <rect x="64" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(15 69 59)"/>
+    <circle cx="74" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
+    <!-- cabeça -->
+    <rect x="36" y="22" width="28" height="22" rx="5" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+    <!-- olhos -->
+    <circle cx="44" cy="32" r="3.5" fill="#ffcc00"/>
+    <circle cx="56" cy="32" r="3.5" fill="#ffcc00"/>
+    <!-- boca / sensor -->
+    <rect x="45" y="38" width="10" height="3" rx="1.5" fill="#ffcc00"/>
+    <!-- antena -->
+    <line x1="50" y1="22" x2="50" y2="14" stroke="#ffcc00" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="50" cy="12" r="3" fill="#ffcc00"/>
+  </svg>
+
   <h1>BCG — Breaking Computation Group</h1>
   <p class="tagline">Indústria 4.0 · Robótica Industrial · Intralogística Inteligente</p>
-  <span class="badge">GUIA VISUAL DE REDES PARA AUTOMAÇÃO</span>
+  <span class="badge">Guia Visual de Redes para Automação</span>
 </header>
 
 <!-- ABAS -->
@@ -426,17 +494,38 @@
 <section id="cabos" class="tab-content active" role="tabpanel">
   <div class="cards">
     <div class="card" data-cabo="par" role="button" tabindex="0" aria-label="Ver explicação do Par Trançado">
-      <div class="icon">🔗</div>
+      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Cabo par trançado -->
+        <rect x="20" y="20" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="20" y="42" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="20" y="64" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+        <path d="M20 27 Q 30 22, 40 27 T 60 27 T 80 27" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
+        <path d="M20 49 Q 30 44, 40 49 T 60 49 T 80 49" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
+        <path d="M20 71 Q 30 66, 40 71 T 60 71 T 80 71" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
+      </svg>
       <h3>Par Trançado</h3>
       <small>Clique para ver onde é usado</small>
     </div>
     <div class="card" data-cabo="fibra" role="button" tabindex="0" aria-label="Ver explicação da Fibra Óptica">
-      <div class="icon">💡</div>
+      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Fibra óptica -->
+        <rect x="15" y="35" width="70" height="30" rx="15" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
+        <circle cx="35" cy="50" r="7" fill="#ffcc00"/>
+        <circle cx="50" cy="50" r="7" fill="#ffcc00" opacity="0.85"/>
+        <circle cx="65" cy="50" r="7" fill="#ffcc00" opacity="0.7"/>
+        <path d="M15 35 L 10 30 M85 35 L 90 30 M15 65 L 10 70 M85 65 L 90 70" stroke="#ffcc00" stroke-width="2" stroke-linecap="round"/>
+      </svg>
       <h3>Fibra Óptica</h3>
       <small>Clique para ver onde é usado</small>
     </div>
     <div class="card" data-cabo="wireless" role="button" tabindex="0" aria-label="Ver explicação do Wireless">
-      <div class="icon">📶</div>
+      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Wireless -->
+        <circle cx="50" cy="70" r="6" fill="#ffcc00"/>
+        <path d="M35 58 Q 50 44, 65 58" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M26 48 Q 50 26, 74 48" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M17 38 Q 50 8, 83 38" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
       <h3>Wireless</h3>
       <small>Clique para ver onde é usado</small>
     </div>
@@ -516,113 +605,4 @@
   </div>
 </section>
 
-<!-- ========== SEÇÃO DE ARTES ========== -->
-<section class="artes">
-  <h2>🎨 Artes Visuais — Pilares de Solução BCG</h2>
-  <p>Representações visuais dos três pilares que sustentam a arquitetura fabril inteligente da BCG.</p>
-
-  <div class="artes-grid">
-    <div class="arte-card">
-      <div class="arte-visual">🦾</div>
-      <h3>Robótica de Produção</h3>
-      <p>Células robotizadas de soldagem, montagem e paletização com repetibilidade milimétrica e integração total à rede industrial.</p>
-      <span class="tag">CHÃO DE FÁBRICA MECÂNICO</span>
-    </div>
-
-    <div class="arte-card">
-      <div class="arte-visual">🤖</div>
-      <h3>Intralogística 4.0</h3>
-      <p>Frotas de AMRs e AGVs, armazenamento automatizado e sorting inteligente para fluxo contínuo de materiais.</p>
-      <span class="tag">LOGÍSTICA INTERNA</span>
-    </div>
-
-    <div class="arte-card">
-      <div class="arte-visual">🧠</div>
-      <h3>Ecossistema Indústria 4.0</h3>
-      <p>Digital Twins, visão computacional, IoT e dashboards de OEE com manutenção preditiva em tempo real.</p>
-      <span class="tag">COMPUTAÇÃO APLICADA</span>
-    </div>
-
-    <div class="arte-card">
-      <div class="arte-visual">🌐</div>
-      <h3>Arquitetura de Rede</h3>
-      <p>Backbone em fibra, par trançado blindado e wireless industrial — a espinha dorsal que conecta todos os pilares.</p>
-      <span class="tag">INFRAESTRUTURA</span>
-    </div>
-
-    <div class="arte-card">
-      <div class="arte-visual">📊</div>
-      <h3>Dashboard Industrial</h3>
-      <p>Monitoramento de OEE, manutenção preditiva e rastreabilidade total alimentados pela rede industrial.</p>
-      <span class="tag">DADOS & ANALYTICS</span>
-    </div>
-
-    <div class="arte-card">
-      <div class="arte-visual">🔬</div>
-      <h3>Gêmeos Digitais</h3>
-      <p>Simulação 3D prévia de células robóticas e linhas logísticas para validação sem parada de planta.</p>
-      <span class="tag">SIMULAÇÃO</span>
-    </div>
-  </div>
-</section>
-
-<!-- ========== CTA ========== -->
-<section class="cta">
-  <h2>Pronto para transformar sua planta?</h2>
-  <p>A BCG diagnostica gargalos produtivos e logísticos e apresenta a arquitetura de automação ideal para sua operação. Agende uma reunião de engenharia de aplicação.</p>
-  <button onclick="alert('Entre em contato com a engenharia BCG para agendar um diagnóstico técnico da sua planta.')">Agendar Diagnóstico BCG</button>
-</section>
-
-<footer>
-  <strong>BCG — Breaking Computation Group</strong> · Indústria 4.0 & Robótica Industrial<br>
-  Guia Visual de Redes para Automação · Atividade Didática
-</footer>
-
-<script>
-  // ---- Abas ----
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // ---- Cards de cabos (clique + teclado para acessibilidade) ----
-  const cards = document.querySelectorAll('.card');
-  function selecionarCabo(card) {
-    cards.forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    document.querySelectorAll('.explain').forEach(e => e.classList.add('hidden'));
-    document.getElementById('explain-' + card.dataset.cabo).classList.remove('hidden');
-  }
-  cards.forEach(card => {
-    card.addEventListener('click', () => selecionarCabo(card));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        selecionarCabo(card);
-      }
-    });
-  });
-
-  // ---- Botões de topologia ----
-  const topoBtns = document.querySelectorAll('.topo-btn');
-  topoBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      topoBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('topo-estrela').classList.add('hidden');
-      document.getElementById('topo-barramento').classList.add('hidden');
-      document.getElementById('topo-' + btn.dataset.topo).classList.remove('hidden');
-    });
-  });
-</script>
-</body>
-</html>
+<!-- ========== SEÇÃO DE ARTES =

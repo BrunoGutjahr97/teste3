@@ -1,600 +1,656 @@
-html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<title>BCG — Breaking Computation Group | Redes para Automação</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>BCG Automação Industrial | Redes e Robótica para Manufatura Avançada</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --branco: #ffffff;
-    --branco-suave: #f7f7f2;
-    --cinza-claro: #efefe8;
-    --cinza-borda: #d8d8cc;
-    --preto: #0d0d0d;
-    --preto-suave: #1f1f1f;
-    --amarelo: #ffcc00;
-    --amarelo-escuro: #e6b800;
-    --amarelo-claro: #fff8d6;
-    --texto: #111111;
-    --texto-sec: #555555;
-    --verde: #1f8a3b;
-    --vermelho: #c0392b;
-    --raio: 14px;
-    --sombra: 0 6px 22px rgba(0,0,0,0.08);
-    --sombra-hover: 0 12px 32px rgba(0,0,0,0.14);
-  }
-
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-  body {
-    font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
-    background: var(--branco);
-    color: var(--texto);
-    min-height: 100vh;
-    line-height: 1.55;
-    padding: clamp(10px, 2vw, 20px);
-    overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  img, svg { max-width: 100%; display: block; }
-
-  /* ============ HEADER ============ */
-  header {
-    text-align: center;
-    padding: clamp(26px, 5vw, 40px) clamp(14px, 4vw, 24px);
-    background: var(--preto);
-    border-radius: var(--raio);
-    margin-bottom: clamp(18px, 3vw, 24px);
-    border: 3px solid var(--amarelo);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--sombra);
-  }
-  header::before {
-    content: "";
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,204,0,0.06) 40px, rgba(255,204,0,0.06) 80px);
-    animation: scan 24s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes scan { from { transform: translate(0,0); } to { transform: translate(80px,80px); } }
-
-  header .logo-robot {
-    width: clamp(60px, 13vw, 82px);
-    margin: 0 auto 14px;
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 0 16px rgba(255,204,0,0.55));
-  }
-  header h1 {
-    font-size: clamp(1.2rem, 4.4vw, 2rem);
-    letter-spacing: 0.5px;
-    position: relative;
-    z-index: 1;
-    color: var(--amarelo);
-    text-shadow: 0 0 18px rgba(255,204,0,0.35);
-    word-wrap: break-word;
-    font-weight: 800;
-  }
-  header .tagline {
-    font-size: clamp(0.74rem, 2.4vw, 0.92rem);
-    color: #e0e0d0;
-    margin-top: 8px;
-    position: relative;
-    z-index: 1;
-    line-height: 1.4;
-    letter-spacing: 0.4px;
-  }
-  header .badge {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 6px clamp(12px, 3vw, 16px);
-    background: var(--amarelo);
-    border-radius: 20px;
-    font-size: clamp(0.62rem, 2vw, 0.76rem);
-    color: var(--preto);
-    position: relative;
-    z-index: 1;
-    letter-spacing: 1px;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-
-  /* ============ TABS ============ */
-  .tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: clamp(16px, 3vw, 22px);
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    flex: 1 1 auto;
-    min-width: 150px;
-    max-width: 300px;
-    padding: clamp(12px, 2.5vw, 14px) clamp(16px, 3vw, 28px);
-    border: 2px solid var(--preto);
-    border-radius: 10px;
-    background: var(--branco);
-    color: var(--preto);
-    font-weight: 800;
-    cursor: pointer;
-    font-size: clamp(0.85rem, 2.6vw, 1rem);
-    transition: 0.22s;
-    letter-spacing: 0.3px;
-    touch-action: manipulation;
-    white-space: nowrap;
-  }
-  .tab-btn:hover { background: var(--amarelo-claro); }
-  .tab-btn.active {
-    background: var(--preto);
-    color: var(--amarelo);
-    border-color: var(--preto);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  }
-
-  .tab-content { display: none; animation: fadeIn 0.35s ease; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ============ CARDS DE CABOS ============ */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-    gap: clamp(12px, 2.5vw, 18px);
-    margin-bottom: clamp(16px, 3vw, 22px);
-  }
-  .card {
-    background: var(--branco);
-    border-radius: var(--raio);
-    padding: clamp(18px, 3.5vw, 24px);
-    cursor: pointer;
-    border: 2px solid var(--cinza-borda);
-    transition: 0.25s;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    touch-action: manipulation;
-    box-shadow: var(--sombra);
-  }
-  .card::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: var(--amarelo);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s;
-  }
-  .card:hover::after, .card.selected::after { transform: scaleX(1); }
-
-  .card:hover, .card:focus-visible {
-    transform: translateY(-5px);
-    border-color: var(--preto);
-    box-shadow: var(--sombra-hover);
-    outline: none;
-  }
-  .card.selected {
-    border-color: var(--preto);
-    background: var(--amarelo-claro);
-    box-shadow: 0 10px 30px rgba(255,204,0,0.4);
-  }
-  .card .icon-svg {
-    width: clamp(56px, 14vw, 72px);
-    height: clamp(56px, 14vw, 72px);
-    margin: 0 auto 12px;
-  }
-  .card h3 { color: var(--preto); margin-bottom: 6px; font-size: clamp(1rem, 2.8vw, 1.12rem); font-weight: 800; }
-  .card small { color: var(--texto-sec); font-size: clamp(0.72rem, 2.2vw, 0.8rem); }
-
-  /* ============ PAINEL DE EXPLICAÇÃO ============ */
-  .explain {
-    background: var(--branco-suave);
-    border-left: 6px solid var(--amarelo);
-    border-radius: 10px;
-    padding: clamp(18px, 3.5vw, 24px);
-    min-height: 90px;
-    box-shadow: var(--sombra);
-    line-height: 1.7;
-  }
-  .explain h3 { color: var(--preto); margin-bottom: 10px; font-size: clamp(1rem, 3vw, 1.18rem); font-weight: 800; }
-  .explain p { color: var(--texto); font-size: clamp(0.86rem, 2.5vw, 0.98rem); }
-  .explain strong { color: var(--preto); background: var(--amarelo); padding: 1px 5px; border-radius: 4px; }
-  .hidden { display: none; }
-
-  /* ============ TOPOLOGIAS ============ */
-  .topo-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: clamp(16px, 3vw, 22px);
-  }
-  .topo-btn {
-    flex: 1 1 auto;
-    min-width: 160px;
-    max-width: 320px;
-    padding: clamp(12px, 2.8vw, 15px) clamp(16px, 3vw, 30px);
-    border: 2px solid var(--preto);
-    border-radius: 10px;
-    background: var(--branco);
-    color: var(--preto);
-    font-weight: 800;
-    font-size: clamp(0.85rem, 2.6vw, 1rem);
-    cursor: pointer;
-    transition: 0.22s;
-    touch-action: manipulation;
-  }
-  .topo-btn:hover { background: var(--amarelo-claro); }
-  .topo-btn.active {
-    background: var(--preto);
-    color: var(--amarelo);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  }
-
-  .topo-panel {
-    background: var(--branco);
-    border-radius: var(--raio);
-    padding: clamp(20px, 3.5vw, 26px);
-    border: 2px solid var(--cinza-borda);
-    box-shadow: var(--sombra);
-    animation: fadeIn 0.35s ease;
-  }
-  .topo-panel h3 { color: var(--preto); margin-bottom: 12px; font-size: clamp(1.05rem, 3vw, 1.22rem); font-weight: 800; }
-  .topo-panel > p { line-height: 1.7; margin-bottom: 18px; color: var(--texto); font-size: clamp(0.86rem, 2.5vw, 0.98rem); }
-  .topo-panel strong { background: var(--amarelo); padding: 1px 5px; border-radius: 4px; }
-
-  .two-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(12px, 2.5vw, 18px);
-  }
-  @media (max-width: 640px) { .two-cols { grid-template-columns: 1fr; } }
-
-  .pros, .cons {
-    border-radius: 10px;
-    padding: clamp(14px, 3vw, 18px);
-    background: var(--branco-suave);
-  }
-  .pros { border-left: 5px solid var(--verde); }
-  .cons { border-left: 5px solid var(--vermelho); }
-  .pros h4 { color: var(--verde); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); font-weight: 800; }
-  .cons h4 { color: var(--vermelho); margin-bottom: 10px; font-size: clamp(0.95rem, 2.6vw, 1rem); font-weight: 800; }
-  ul { padding-left: clamp(16px, 3vw, 20px); }
-  li { margin-bottom: 6px; line-height: 1.5; color: var(--texto); font-size: clamp(0.82rem, 2.4vw, 0.95rem); }
-
-  /* ============ SEÇÃO DE ARTES ============ */
-  .artes {
-    margin-top: clamp(24px, 4vw, 34px);
-    padding: clamp(20px, 4vw, 30px);
-    background: var(--preto);
-    border-radius: var(--raio);
-    border: 3px solid var(--amarelo);
-    box-shadow: var(--sombra);
-    position: relative;
-    overflow: hidden;
-  }
-  .artes::before {
-    content: "";
-    position: absolute;
-    top: 0; right: 0;
-    width: 220px; height: 220px;
-    background: radial-gradient(circle, rgba(255,204,0,0.15), transparent 70%);
-    pointer-events: none;
-  }
-  .artes h2 {
-    color: var(--amarelo);
-    margin-bottom: 8px;
-    font-size: clamp(1.1rem, 3.4vw, 1.38rem);
-    letter-spacing: 0.3px;
-    font-weight: 800;
-    position: relative;
-    z-index: 1;
-  }
-  .artes > p { color: #e0e0d0; margin-bottom: clamp(16px, 3vw, 22px); font-size: clamp(0.84rem, 2.4vw, 0.96rem); position: relative; z-index: 1; }
-
-  .artes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-    gap: clamp(14px, 2.5vw, 18px);
-    position: relative;
-    z-index: 1;
-  }
-  .arte-card {
-    background: var(--branco);
-    border-radius: var(--raio);
-    padding: clamp(16px, 3.5vw, 22px);
-    border: 2px solid var(--amarelo);
-    transition: 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .arte-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 34px rgba(255,204,0,0.35);
-    border-color: var(--amarelo-escuro);
-  }
-  .arte-card .arte-visual {
-    height: clamp(120px, 25vw, 150px);
-    border-radius: 10px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--preto) 0%, #2a2a1a 100%);
-    position: relative;
-    overflow: hidden;
-    border: 2px solid var(--amarelo);
-  }
-  .arte-card .arte-visual::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,204,0,0.08) 18px, rgba(255,204,0,0.08) 20px);
-  }
-  .arte-card .arte-visual svg {
-    width: clamp(80px, 20vw, 110px);
-    height: clamp(80px, 20vw, 110px);
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 0 10px rgba(255,204,0,0.5));
-  }
-  .arte-card h3 { color: var(--preto); margin-bottom: 8px; font-size: clamp(0.98rem, 2.8vw, 1.08rem); font-weight: 800; }
-  .arte-card p { color: var(--texto-sec); font-size: clamp(0.8rem, 2.3vw, 0.9rem); line-height: 1.6; }
-  .arte-card .tag {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 4px 11px;
-    background: var(--preto);
-    border-radius: 12px;
-    font-size: clamp(0.62rem, 1.9vw, 0.72rem);
-    color: var(--amarelo);
-    letter-spacing: 0.5px;
-    font-weight: 800;
-  }
-
-  /* ============ CTA ============ */
-  .cta {
-    margin-top: clamp(24px, 4vw, 34px);
-    text-align: center;
-    padding: clamp(26px, 5vw, 38px) clamp(16px, 4vw, 24px);
-    background: linear-gradient(135deg, var(--amarelo) 0%, var(--amarelo-escuro) 100%);
-    border-radius: var(--raio);
-    border: 3px solid var(--preto);
-    box-shadow: var(--sombra);
-    position: relative;
-    overflow: hidden;
-  }
-  .cta h2 { color: var(--preto); margin-bottom: 12px; font-size: clamp(1.15rem, 3.6vw, 1.5rem); font-weight: 800; }
-  .cta p {
-    color: var(--preto);
-    margin-bottom: 20px;
-    max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-    font-size: clamp(0.88rem, 2.5vw, 1rem);
-  }
-  .cta button {
-    width: 100%;
-    max-width: 340px;
-    padding: clamp(13px, 3vw, 15px) clamp(24px, 5vw, 34px);
-    background: var(--preto);
-    color: var(--amarelo);
-    border: none;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: clamp(0.9rem, 2.6vw, 1rem);
-    cursor: pointer;
-    transition: 0.22s;
-    letter-spacing: 0.4px;
-    touch-action: manipulation;
-  }
-  .cta button:hover {
-    background: var(--preto-suave);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.3);
-  }
-
-  /* ============ FOOTER ============ */
-  footer {
-    text-align: center;
-    font-size: clamp(0.74rem, 2.2vw, 0.84rem);
-    color: var(--texto-sec);
-    margin-top: clamp(22px, 4vw, 30px);
-    padding: clamp(16px, 3vw, 20px);
-    border-top: 3px solid var(--amarelo);
-    line-height: 1.6;
-  }
-  footer strong { color: var(--preto); }
-
-  /* ============ BREAKPOINTS ============ */
-  @media (max-width: 900px) { .artes-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) {
-    .artes-grid { grid-template-columns: 1fr; }
-    .tabs { flex-direction: column; align-items: stretch; }
-    .tab-btn { max-width: none; }
-  }
-  @media (max-width: 380px) {
-    .cards { grid-template-columns: 1fr; }
-    .topo-btn { min-width: 100%; }
-  }
-  @media (min-width: 1400px) { body { max-width: 1360px; margin: 0 auto; } }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
+    :root {
+      --preto: #0a0a0a;
+      --preto-suave: #1a1a1a;
+      --branco: #ffffff;
+      --branco-suave: #f5f5f0;
+      --cinza-borda: #e0e0d8;
+      --amarelo: #ffc800;
+      --amarelo-escuro: #d4a800;
+      --amarelo-claro: #fff9e0;
+      --texto: #111111;
+      --texto-sec: #555555;
+      --verde: #1a7a3a;
+      --raio: 12px;
+      --sombra: 0 4px 20px rgba(0, 0, 0, 0.06);
+      --sombra-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
     }
-  }
-</style>
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--branco-suave);
+      color: var(--texto);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page { max-width: 1320px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--cinza-borda);
+      position: sticky;
+      top: 0;
+      background: var(--branco-suave);
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      background: var(--preto);
+      color: var(--amarelo);
+      font-weight: 900;
+      font-size: 1.5rem;
+      line-height: 1;
+      padding: 0.35rem 0.75rem 0.45rem;
+      border-radius: 8px;
+      letter-spacing: -1.5px;
+    }
+
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--texto-sec); font-weight: 600; }
+
+    .nav { display: flex; gap: 2rem; font-size: 0.85rem; font-weight: 600; }
+    .nav a {
+      color: var(--texto);
+      text-decoration: none;
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .nav a:hover, .nav a.active { border-bottom-color: var(--amarelo); }
+
+    .nav-cta {
+      background: var(--preto);
+      color: var(--branco) !important;
+      padding: 0.5rem 1.2rem !important;
+      border-radius: 50px;
+      border: none !important;
+    }
+    .nav-cta:hover { background: var(--preto-suave); }
+
+    /* Hero com imagem real */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      padding: 3.5rem 0 4rem;
+    }
+
+    .hero-content { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--amarelo-claro);
+      color: var(--preto);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      border: 1px solid var(--amarelo);
+      width: fit-content;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 3.8vw, 3.2rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--preto);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(180deg, transparent 60%, var(--amarelo) 60%);
+      padding: 0 0.1rem;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--texto-sec);
+      max-width: 50ch;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .btn-primary {
+      background: var(--preto);
+      color: var(--branco);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+    .btn-primary:hover { background: var(--preto-suave); transform: translateY(-1px); box-shadow: var(--sombra-hover); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--preto);
+      color: var(--preto);
+    }
+    .btn-outline:hover { background: var(--amarelo); border-color: var(--amarelo); }
+
+    .hero-image {
+      position: relative;
+      border-radius: calc(var(--raio) * 1.5);
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      aspect-ratio: 4 / 3;
+      background: var(--preto);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-image-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      color: var(--branco);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Stats bar */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--cinza-borda);
+      border-bottom: 1px solid var(--cinza-borda);
+      margin-bottom: 3.5rem;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--preto);
+      line-height: 1.2;
+    }
+    .stat-number span { color: var(--amarelo-escuro); }
+    .stat-label { font-size: 0.8rem; color: var(--texto-sec); font-weight: 500; margin-top: 0.25rem; }
+
+    /* Section headers */
+    .section-header { margin-bottom: 2rem; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--amarelo-escuro);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--preto);
+      line-height: 1.25;
+    }
+    .section-sub { color: var(--texto-sec); margin-top: 0.5rem; font-size: 0.95rem; max-width: 60ch; }
+
+    /* Soluções com imagem */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .solution-card {
+      background: var(--branco);
+      border-radius: var(--raio);
+      overflow: hidden;
+      border: 1px solid var(--cinza-borda);
+      box-shadow: var(--sombra);
+      transition: box-shadow 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .solution-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-4px); }
+
+    .solution-card-img {
+      height: 180px;
+      overflow: hidden;
+      background: var(--preto-suave);
+    }
+
+    .solution-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+
+    .solution-card:hover .solution-card-img img { transform: scale(1.04); }
+
+    .solution-card-body { padding: 1.4rem 1.3rem 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+
+    .solution-card-body h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
+
+    .solution-card-body p { font-size: 0.88rem; color: var(--texto-sec); flex: 1; }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--verde);
+      background: #e8f5e8;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      width: fit-content;
+      margin-top: 0.25rem;
+    }
+
+    /* Feature escuro com imagem */
+    .feature-dark {
+      background: var(--preto);
+      color: var(--branco);
+      border-radius: calc(var(--raio) * 1.5);
+      overflow: hidden;
+      margin: 2rem 0 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-dark-content {
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .feature-dark-content h2 {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-dark-content h2 span { color: var(--amarelo); }
+
+    .feature-dark-content p { color: #aaaaaa; font-size: 0.95rem; max-width: 42ch; }
+
+    .feature-dark-img { overflow: hidden; min-height: 320px; }
+    .feature-dark-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .btn-amarelo {
+      background: var(--amarelo);
+      color: var(--preto);
+      font-weight: 700;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      width: fit-content;
+      transition: all 0.2s;
+      cursor: default;
+      margin-top: 0.5rem;
+    }
+    .btn-amarelo:hover { background: var(--amarelo-escuro); transform: translateY(-1px); }
+
+    /* Protocolos */
+    .protocols-section { margin-bottom: 4rem; }
+
+    .protocol-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+    }
+
+    .protocol {
+      background: var(--branco);
+      border: 1px solid var(--cinza-borda);
+      border-radius: 100px;
+      padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }
+
+    .protocol:hover { border-color: var(--amarelo); }
+    .protocol::before { content: "●"; color: var(--amarelo-escuro); font-size: 0.6rem; }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--cinza-borda);
+      padding: 2.5rem 0 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-brand p { font-size: 0.85rem; color: var(--texto-sec); max-width: 35ch; margin-top: 0.5rem; }
+
+    .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+
+    .footer-col h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--preto);
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--texto-sec);
+      text-decoration: none;
+      margin-bottom: 0.4rem;
+    }
+    .footer-col a:hover { color: var(--preto); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--amarelo); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--cinza-borda);
+      padding-top: 1.5rem;
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: var(--texto-sec);
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 0 3rem; }
+      .hero-image { order: -1; aspect-ratio: 16 / 10; }
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .solutions-grid { grid-template-columns: 1fr 1fr; }
+      .feature-dark { grid-template-columns: 1fr; }
+      .feature-dark-img { min-height: 240px; order: -1; }
+      .feature-dark-content { padding: 2rem; }
+      .nav { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 0 1rem; }
+      .solutions-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat-number { font-size: 1.7rem; }
+      .footer { flex-direction: column; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <a href="#" class="logo" aria-label="BCG Automação Industrial">
+        <span class="logo-mark">BCG</span>
+        <span class="logo-text">
+          <span class="logo-title">Breaking Computation Group</span>
+          <span class="logo-sub">Automação &amp; Redes Industriais</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#" class="active">Início</a>
+        <a href="#">Soluções</a>
+        <a href="#">Robótica</a>
+        <a href="#">Protocolos</a>
+        <a href="#">Projetos</a>
+        <a href="#" class="nav-cta">Contato</a>
+      </nav>
+    </header>
 
-<header>
-  <!-- Robô industrial SVG preto/amarelo -->
-  <svg class="logo-robot" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="30" y="80" width="40" height="10" rx="3" fill="#ffcc00"/>
-    <rect x="35" y="72" width="30" height="10" rx="3" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <rect x="38" y="46" width="24" height="28" rx="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-    <rect x="44" y="52" width="12" height="6" rx="1.5" fill="#ffcc00"/>
-    <rect x="26" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(-15 31 59)"/>
-    <circle cx="26" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <rect x="64" y="48" width="10" height="22" rx="3" fill="#ffcc00" transform="rotate(15 69 59)"/>
-    <circle cx="74" cy="48" r="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-    <rect x="36" y="22" width="28" height="22" rx="5" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-    <circle cx="44" cy="32" r="3.5" fill="#ffcc00"/>
-    <circle cx="56" cy="32" r="3.5" fill="#ffcc00"/>
-    <rect x="45" y="38" width="10" height="3" rx="1.5" fill="#ffcc00"/>
-    <line x1="50" y1="22" x2="50" y2="14" stroke="#ffcc00" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="50" cy="12" r="3" fill="#ffcc00"/>
-  </svg>
-
-  <h1>BCG — Breaking Computation Group</h1>
-  <p class="tagline">Indústria 4.0 · Robótica Industrial · Intralogística Inteligente</p>
-  <span class="badge">Guia Visual de Redes para Automação</span>
-</header>
-
-<nav class="tabs" role="tablist" aria-label="Seções do guia">
-  <button class="tab-btn active" data-tab="cabos" role="tab" aria-selected="true" aria-controls="cabos">🔌 Cabos Industriais</button>
-  <button class="tab-btn" data-tab="topologias" role="tab" aria-selected="false" aria-controls="topologias">🕸️ Topologias</button>
-</nav>
-
-<!-- ========== ABA 1: CABOS ========== -->
-<section id="cabos" class="tab-content active" role="tabpanel">
-  <div class="cards">
-    <div class="card" data-cabo="par" role="button" tabindex="0" aria-label="Ver explicação do Par Trançado">
-      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="20" y="20" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-        <rect x="20" y="42" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-        <rect x="20" y="64" width="60" height="14" rx="6" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-        <path d="M20 27 Q 30 22, 40 27 T 60 27 T 80 27" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
-        <path d="M20 49 Q 30 44, 40 49 T 60 49 T 80 49" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
-        <path d="M20 71 Q 30 66, 40 71 T 60 71 T 80 71" fill="none" stroke="#ffcc00" stroke-width="1.5"/>
-      </svg>
-      <h3>Par Trançado</h3>
-      <small>Clique para ver onde é usado</small>
-    </div>
-    <div class="card" data-cabo="fibra" role="button" tabindex="0" aria-label="Ver explicação da Fibra Óptica">
-      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="15" y="35" width="70" height="30" rx="15" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-        <circle cx="35" cy="50" r="7" fill="#ffcc00"/>
-        <circle cx="50" cy="50" r="7" fill="#ffcc00" opacity="0.85"/>
-        <circle cx="65" cy="50" r="7" fill="#ffcc00" opacity="0.7"/>
-        <path d="M15 35 L 10 30 M85 35 L 90 30 M15 65 L 10 70 M85 65 L 90 70" stroke="#ffcc00" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <h3>Fibra Óptica</h3>
-      <small>Clique para ver onde é usado</small>
-    </div>
-    <div class="card" data-cabo="wireless" role="button" tabindex="0" aria-label="Ver explicação do Wireless">
-      <svg class="icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="50" cy="70" r="6" fill="#ffcc00"/>
-        <path d="M35 58 Q 50 44, 65 58" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M26 48 Q 50 26, 74 48" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M17 38 Q 50 8, 83 38" fill="none" stroke="#ffcc00" stroke-width="3.5" stroke-linecap="round"/>
-      </svg>
-      <h3>Wireless</h3>
-      <small>Clique para ver onde é usado</small>
-    </div>
-  </div>
-
-  <div id="explain-par" class="explain hidden">
-    <h3>🔗 Par Trançado na Fábrica Inteligente</h3>
-    <p>É o meio mais comum nas redes industriais Ethernet (PROFINET, EtherNet/IP). Na arquitetura BCG, conecta <strong>CLPs, sensores, IHMs e células robóticas</strong> ao switch de chão de fábrica. Versões blindadas (STP/FTP) são obrigatórias em ambientes com motores e inversores de frequência — caso típico de células de soldagem e paletização. <strong>Ganho BCG:</strong> repetibilidade milimétrica no controle de robôs articulados.</p>
-  </div>
-
-  <div id="explain-fibra" class="explain hidden">
-    <h3>💡 Fibra Óptica no Backbone Industrial</h3>
-    <p>Usada para <strong>longas distâncias e áreas com EMI severa</strong> — entre galpões, perto de fornos e motores de alta potência. Transmite por luz, é imune a ruído elétrico e suporta altíssimas velocidades. Na BCG, é o <em>backbone</em> que interliga células de produção à camada de <strong>IoT e Dashboard Industrial</strong>, garantindo dados de OEE em tempo real sem perda. <strong>Ganho BCG:</strong> integridade total dos dados de manutenção preditiva.</p>
-  </div>
-
-  <div id="explain-wireless" class="explain hidden">
-    <h3>📶 Wireless na Intralogística 4.0</h3>
-    <p>Essencial onde cabo não chega: <strong>frotas de AMRs e AGVs</strong>, empilhadeiras, tablets de manutenção e sensores em partes móveis. Wi-Fi 6 industrial e 5G privado são as escolhas BCG para mobilidade com baixa latência. Exige cuidado com interferência e segurança — não indicado para controle crítico em tempo real. <strong>Ganho BCG:</strong> rastreabilidade total do fluxo de materiais e redução do tempo de ciclo logístico.</p>
-  </div>
-</section>
-
-<!-- ========== ABA 2: TOPOLOGIAS ========== -->
-<section id="topologias" class="tab-content" role="tabpanel">
-  <div class="topo-buttons">
-    <button class="topo-btn active" data-topo="estrela">⭐ Layout em Estrela</button>
-    <button class="topo-btn" data-topo="barramento">➖ Layout em Barramento</button>
-  </div>
-
-  <div id="topo-estrela" class="topo-panel">
-    <h3>⭐ Layout em Estrela — Padrão BCG</h3>
-    <p>Todos os dispositivos (CLPs, sensores, IHMs, células robóticas) se conectam a um <strong>switch industrial central</strong>. É a topologia padrão das redes Ethernet industriais modernas (PROFINET, EtherNet/IP) e a base da arquitetura BCG para fábricas inteligentes. Se um ramal falha, apenas aquele dispositivo cai — o restante da planta continua operando.</p>
-    <div class="two-cols">
-      <div class="pros">
-        <h4>✔ Vantagens</h4>
-        <ul>
-          <li>Falha em um ramal não derruba a rede toda</li>
-          <li>Fácil diagnóstico e expansão modular</li>
-          <li>Suporta altas velocidades e full-duplex</li>
-          <li>Padrão das redes Ethernet industriais</li>
-          <li>Compatível com Digital Twins e IoT</li>
-        </ul>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="badge">⚡ Integração de sistemas industriais</span>
+        <h1>Redes e robótica para a <em>manufatura avançada</em>.</h1>
+        <p>
+          Projetamos e integramos infraestruturas de rede determinísticas e células robóticas
+          para automação industrial. Do chão de fábrica à nuvem, com segurança e disponibilidade.
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-primary">Falar com engenharia</a>
+          <a href="#" class="btn btn-outline">Ver projetos</a>
+        </div>
       </div>
-      <div class="cons">
-        <h4>✘ Desvantagens</h4>
-        <ul>
-          <li>Depende do switch central (ponto único de falha)</li>
-          <li>Mais cabos (um por dispositivo)</li>
-          <li>Custo maior com switch industrial gerenciável</li>
-        </ul>
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1200&q=80&auto=format&fit=crop"
+          alt="Braço robótico industrial em operação em linha de montagem automatizada"
+          loading="eager"
+        >
+        <span class="hero-image-label">Célula robótica · Integração em produção</span>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-number">+<span>180</span></div>
+        <div class="stat-label">Projetos entregues</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span>99,98</span>%</div>
+        <div class="stat-label">Disponibilidade de rede</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span>24</span>/7</div>
+        <div class="stat-label">Suporte técnico</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span>12</span>+</div>
+        <div class="stat-label">Protocolos industriais</div>
       </div>
     </div>
-  </div>
 
-  <div id="topo-barramento" class="topo-panel hidden">
-    <h3>➖ Layout em Barramento — Legado Fieldbus</h3>
-    <p>Todos os dispositivos compartilham um <strong>único cabo principal (barramento)</strong>. Clássica em redes fieldbus antigas (PROFIBUS, AS-i). Simples e barata, mas um rompimento no cabo principal pode derrubar toda a rede — risco inaceitável em células de produção críticas. A BCG recomenda migração para estrela/Ethernet em projetos de modernização.</p>
-    <div class="two-cols">
-      <div class="pros">
-        <h4>✔ Vantagens</h4>
-        <ul>
-          <li>Menos cabeamento e custo menor</li>
-          <li>Instalação simples em linha</li>
-          <li>Boa para poucos dispositivos próximos</li>
-        </ul>
+    <!-- Soluções -->
+    <div class="section-header">
+      <div class="section-label">O que fazemos</div>
+      <h2 class="section-title">Soluções em redes e automação robótica</h2>
+      <p class="section-sub">
+        Da camada de campo ao nível corporativo: projetos de rede industrial com redundância,
+        segmentação e integração de robôs e sistemas de supervisão.
+      </p>
+    </div>
+
+    <div class="solutions-grid">
+      <article class="solution-card">
+        <div class="solution-card-img">
+          <img
+            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80&auto=format&fit=crop"
+            alt="Engenheira operando sistema de automação com braço robótico ao fundo"
+            loading="lazy"
+          >
+        </div>
+        <div class="solution-card-body">
+          <h3>Redes Fieldbus &amp; Ethernet Industrial</h3>
+          <p>
+            Projetos com PROFINET, EtherNet/IP e Modbus TCP. Switches gerenciáveis,
+            VLANs, QoS e anéis de redundância para ambientes severos.
+          </p>
+          <span class="card-tag">Determinístico</span>
+        </div>
+      </article>
+
+      <article class="solution-card">
+        <div class="solution-card-img">
+          <img
+            src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80&auto=format&fit=crop"
+            alt="Braço robótico colaborativo em célula de montagem de precisão"
+            loading="lazy"
+          >
+        </div>
+        <div class="solution-card-body">
+          <h3>Células Robóticas &amp; Cobots</h3>
+          <p>
+            Integração de robôs industriais e colaborativos para montagem, paletização
+            e inspeção. Programação, segurança e comissionamento.
+          </p>
+          <span class="card-tag">Robótica</span>
+        </div>
+      </article>
+
+      <article class="solution-card">
+        <div class="solution-card-img">
+          <img
+            src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80&auto=format&fit=crop"
+            alt="Técnico em ambiente industrial monitorando sistemas de controle"
+            loading="lazy"
+          >
+        </div>
+        <div class="solution-card-body">
+          <h3>Segmentação &amp; Cibersegurança OT</h3>
+          <p>
+            Zonas industriais, DMZ, NAT industrial e políticas de acesso para proteger
+            controladores e células de produção.
+          </p>
+          <span class="card-tag">IEC 62443</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- Feature escuro -->
+    <section class="feature-dark">
+      <div class="feature-dark-content">
+        <h2>Projetos de automação <span>do zero à operação assistida</span></h2>
+        <p>
+          Levantamento de requisitos, arquitetura de rede e robótica, comissionamento
+          e documentação completa. Suporte 24/7 com SLA e monitoramento contínuo.
+        </p>
+        <a href="#" class="btn-amarelo">Solicitar proposta técnica</a>
       </div>
-      <div class="cons">
-        <h4>✘ Desvantagens</h4>
-        <ul>
-          <li>Rompimento do cabo derruba toda a rede</li>
-          <li>Difícil localizar falhas</li>
-          <li>Colisões e baixa velocidade</li>
-          <li>Expansão limitada</li>
-          <li>Incompatível com requisitos de OEE em tempo real</li>
-        </ul>
+      <div class="feature-dark-img">
+        <img
+          src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=800&q=80&auto=format&fit=crop"
+          alt="Linha de produção automatizada com múltiplos braços robóticos industriais"
+          loading="lazy"
+        >
+      </div>
+    </section>
+
+    <!-- Protocolos -->
+    <div class="protocols-section">
+      <div class="section-header">
+        <div class="section-label">Interoperabilidade</div>
+        <h2 class="section-title">Protocolos e padrões suportados</h2>
+        <p class="section-sub">
+          Integração nativa com os principais padrões da indústria. Sem lock-in de fabricante.
+        </p>
+      </div>
+      <div class="protocol-list" aria-label="Protocolos suportados">
+        <span class="protocol">PROFINET</span>
+        <span class="protocol">EtherNet/IP</span>
+        <span class="protocol">Modbus TCP</span>
+        <span class="protocol">OPC UA</span>
+        <span class="protocol">MQTT</span>
+        <span class="protocol">PROFIBUS</span>
+        <span class="protocol">EtherCAT</span>
+        <span class="protocol">HART</span>
+        <span class="protocol">LoRaWAN</span>
+        <span class="protocol">IEC 61850</span>
+        <span class="protocol">AS-i</span>
+        <span class="protocol">CANopen</span>
+        <span class="protocol">Ethernet POWERLINK</span>
+        <span class="protocol">CC-Link IE</span>
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="margin-bottom: 0.5rem;">
+          <span class="logo-mark" style="font-size: 1.2rem; padding: 0.25rem 0.6rem 0.3rem;">BCG</span>
+          <span class="logo-text">
+            <span class="logo-title" style="font-size: 0.95rem;">Breaking Computation Group</span>
+          </span>
+        </a>
+        <p>Engenharia de redes e automação industrial. Conectividade determinística para a indústria 4.0.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Soluções</h4>
+          <a href="#">Redes industriais</a>
+          <a href="#">Robótica</a>
+          <a href="#">Cibersegurança OT</a>
+          <a href="#">Telemetria</a>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <a href="#">Sobre</a>
+          <a href="#">Projetos</a>
+          <a href="#">Carreiras</a>
+          <a href="#">Contato</a>
+        </div>
+        <div class="footer-col">
+          <h4>Recursos</h4>
+          <a href="#">Documentação</a>
+          <a href="#">Blog técnico</a>
+          <a href="#">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+    <div class="footer-bottom">
+      <span>© 2026 BCG — Breaking Computation Group. Todos os direitos reservados.</span>
+      <span>CNPJ 00.000.000/0001-00 · São Paulo, Brasil</span>
+    </div>
   </div>
-</section>
-
-<!-- ========== SEÇÃO DE ARTES ========== -->
-<section class="artes">
-  <h2>🎨 Pilares de Solução BCG</h2>
-  <p>Representações visuais dos pilares que sustentam a arquitetura fabril inteligente da BCG.</p>
-
-  <div class="artes-grid">
-    <div class="arte-card">
-      <div class="arte-visual">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="30" y="80" width="40" height="10" rx="3" fill="#ffcc00"/>
-          <rect x="35" y="72" width="30" height="10" rx="3" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2"/>
-          <rect x="38" y="46" width="24" height="28" rx="4" fill="#0d0d0d" stroke="#ffcc00" stroke-width="2.5"/>
-          <rect x="44" y="52" width="12" height="6" rx="1.5" fill="#ffcc00"/>
-          <
-
-
+</body>
+</html>

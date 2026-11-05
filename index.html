@@ -25,6 +25,8 @@
       --sombra-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
       background: var(--branco-suave);
@@ -67,16 +69,17 @@
     }
 
     .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
-    .logo-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px; }
+    .logo-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px; color: var(--texto); }
     .logo-sub { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--texto-sec); font-weight: 600; }
 
-    .nav { display: flex; gap: 2rem; font-size: 0.85rem; font-weight: 600; }
+    .nav { display: flex; gap: 1.8rem; font-size: 0.85rem; font-weight: 600; align-items: center; }
     .nav a {
       color: var(--texto);
       text-decoration: none;
       padding-bottom: 4px;
       border-bottom: 2px solid transparent;
       transition: border-color 0.2s;
+      cursor: pointer;
     }
     .nav a:hover, .nav a.active { border-bottom-color: var(--amarelo); }
 
@@ -89,7 +92,12 @@
     }
     .nav-cta:hover { background: var(--preto-suave); }
 
-    /* Hero com imagem real */
+    /* Page system */
+    .page-content { display: none; animation: fadeIn 0.35s ease; }
+    .page-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hero */
     .hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -148,7 +156,8 @@
       border-radius: 60px;
       text-decoration: none;
       transition: all 0.2s;
-      cursor: default;
+      cursor: pointer;
+      border: none;
     }
 
     .btn-primary {
@@ -165,6 +174,20 @@
     }
     .btn-outline:hover { background: var(--amarelo); border-color: var(--amarelo); }
 
+    .btn-amarelo {
+      background: var(--amarelo);
+      color: var(--preto);
+      font-weight: 700;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      width: fit-content;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-amarelo:hover { background: var(--amarelo-escuro); transform: translateY(-1px); }
+
     .hero-image {
       position: relative;
       border-radius: calc(var(--raio) * 1.5);
@@ -174,12 +197,7 @@
       background: var(--preto);
     }
 
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .hero-image-label {
       position: absolute;
@@ -195,7 +213,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Stats bar */
+    /* Stats */
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -207,42 +225,18 @@
     }
 
     .stat-item { text-align: center; }
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--preto);
-      line-height: 1.2;
-    }
+    .stat-number { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--preto); line-height: 1.2; }
     .stat-number span { color: var(--amarelo-escuro); }
     .stat-label { font-size: 0.8rem; color: var(--texto-sec); font-weight: 500; margin-top: 0.25rem; }
 
-    /* Section headers */
+    /* Section */
     .section-header { margin-bottom: 2rem; }
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--amarelo-escuro);
-      margin-bottom: 0.5rem;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--preto);
-      line-height: 1.25;
-    }
+    .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--amarelo-escuro); margin-bottom: 0.5rem; }
+    .section-title { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; color: var(--preto); line-height: 1.25; }
     .section-sub { color: var(--texto-sec); margin-top: 0.5rem; font-size: 0.95rem; max-width: 60ch; }
 
-    /* Soluções com imagem */
-    .solutions-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 4rem;
-    }
+    /* Solutions grid */
+    .solutions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 4rem; }
 
     .solution-card {
       background: var(--branco);
@@ -254,29 +248,14 @@
       display: flex;
       flex-direction: column;
     }
-
     .solution-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-4px); }
 
-    .solution-card-img {
-      height: 180px;
-      overflow: hidden;
-      background: var(--preto-suave);
-    }
-
-    .solution-card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s;
-    }
-
+    .solution-card-img { height: 180px; overflow: hidden; background: var(--preto-suave); }
+    .solution-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
     .solution-card:hover .solution-card-img img { transform: scale(1.04); }
 
     .solution-card-body { padding: 1.4rem 1.3rem 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
-
     .solution-card-body h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
-
     .solution-card-body p { font-size: 0.88rem; color: var(--texto-sec); flex: 1; }
 
     .card-tag {
@@ -293,7 +272,7 @@
       margin-top: 0.25rem;
     }
 
-    /* Feature escuro com imagem */
+    /* Feature dark */
     .feature-dark {
       background: var(--preto);
       color: var(--branco);
@@ -305,53 +284,16 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
     }
 
-    .feature-dark-content {
-      padding: 3rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .feature-dark-content h2 {
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-
+    .feature-dark-content { padding: 3rem 2.5rem; display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+    .feature-dark-content h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
     .feature-dark-content h2 span { color: var(--amarelo); }
-
     .feature-dark-content p { color: #aaaaaa; font-size: 0.95rem; max-width: 42ch; }
-
     .feature-dark-img { overflow: hidden; min-height: 320px; }
     .feature-dark-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .btn-amarelo {
-      background: var(--amarelo);
-      color: var(--preto);
-      font-weight: 700;
-      padding: 0.8rem 1.8rem;
-      border-radius: 60px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      width: fit-content;
-      transition: all 0.2s;
-      cursor: default;
-      margin-top: 0.5rem;
-    }
-    .btn-amarelo:hover { background: var(--amarelo-escuro); transform: translateY(-1px); }
-
-    /* Protocolos */
+    /* Protocols */
     .protocols-section { margin-bottom: 4rem; }
-
-    .protocol-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-top: 1.5rem;
-    }
-
+    .protocol-list { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.5rem; }
     .protocol {
       background: var(--branco);
       border: 1px solid var(--cinza-borda);
@@ -365,9 +307,145 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       transition: border-color 0.2s;
     }
-
     .protocol:hover { border-color: var(--amarelo); }
     .protocol::before { content: "●"; color: var(--amarelo-escuro); font-size: 0.6rem; }
+
+    /* Projects (novo) */
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 4rem; }
+
+    .project-card {
+      background: var(--branco);
+      border-radius: calc(var(--raio) * 1.2);
+      overflow: hidden;
+      border: 1px solid var(--cinza-borda);
+      box-shadow: var(--sombra);
+      transition: box-shadow 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-4px); }
+
+    .project-img { height: 240px; overflow: hidden; position: relative; background: var(--preto-suave); }
+    .project-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s; }
+    .project-card:hover .project-img img { transform: scale(1.05); }
+
+    .project-img .project-year {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--amarelo);
+      color: var(--preto);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .project-body { padding: 1.5rem 1.6rem 1.8rem; display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
+
+    .project-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .project-meta span {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+    }
+    .meta-sector { color: var(--preto); background: var(--amarelo-claro); border: 1px solid var(--amarelo); }
+    .meta-type { color: var(--verde); background: #e8f5e8; }
+
+    .project-body h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.3; }
+    .project-body p { font-size: 0.9rem; color: var(--texto-sec); flex: 1; }
+
+    .project-results {
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--cinza-borda);
+      margin-top: 0.4rem;
+    }
+    .project-results div { display: flex; flex-direction: column; }
+    .project-results strong { font-size: 1.1rem; font-weight: 800; color: var(--preto); }
+    .project-results small { font-size: 0.7rem; color: var(--texto-sec); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+
+    /* Contact page */
+    .contact-hero { padding: 3rem 0 2rem; text-align: center; }
+    .contact-hero h1 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-top: 0.75rem; }
+    .contact-hero p { color: var(--texto-sec); max-width: 55ch; margin: 1rem auto 0; font-size: 1.05rem; }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      margin: 2.5rem 0 4rem;
+    }
+
+    .contact-channels { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-channel {
+      background: var(--branco);
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--raio);
+      padding: 1.4rem 1.5rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      box-shadow: var(--sombra);
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-channel:hover { border-color: var(--amarelo); transform: translateY(-2px); }
+
+    .channel-icon {
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 12px;
+      background: var(--amarelo-claro);
+      border: 1px solid var(--amarelo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .channel-info { display: flex; flex-direction: column; gap: 0.15rem; }
+    .channel-info h3 { font-size: 0.95rem; font-weight: 700; }
+    .channel-info .channel-value { font-size: 1.05rem; font-weight: 800; color: var(--preto); letter-spacing: -0.01em; }
+    .channel-info small { font-size: 0.78rem; color: var(--texto-sec); }
+
+    .contact-side {
+      background: var(--preto);
+      color: var(--branco);
+      border-radius: calc(var(--raio) * 1.3);
+      padding: 2.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+    .contact-side h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+    .contact-side h2 span { color: var(--amarelo); }
+    .contact-side p { color: #aaaaaa; font-size: 0.9rem; }
+
+    .contact-side ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.3rem; }
+    .contact-side li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.88rem; color: #dddddd; }
+    .contact-side li::before { content: "✓"; color: var(--amarelo); font-weight: 900; }
+
+    .contact-side .side-footer {
+      margin-top: auto;
+      border-top: 1px solid #333;
+      padding-top: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: #bbbbbb;
+    }
+    .contact-side .side-footer strong { color: var(--branco); }
 
     /* Footer */
     .footer {
@@ -378,27 +456,10 @@
       justify-content: space-between;
       gap: 2rem;
     }
-
     .footer-brand p { font-size: 0.85rem; color: var(--texto-sec); max-width: 35ch; margin-top: 0.5rem; }
-
     .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
-
-    .footer-col h4 {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--preto);
-      margin-bottom: 0.75rem;
-    }
-
-    .footer-col a {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--texto-sec);
-      text-decoration: none;
-      margin-bottom: 0.4rem;
-    }
+    .footer-col h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--preto); margin-bottom: 0.75rem; }
+    .footer-col a { display: block; font-size: 0.85rem; color: var(--texto-sec); text-decoration: none; margin-bottom: 0.4rem; cursor: pointer; }
     .footer-col a:hover { color: var(--preto); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--amarelo); }
 
     .footer-bottom {
@@ -423,6 +484,8 @@
       .feature-dark { grid-template-columns: 1fr; }
       .feature-dark-img { min-height: 240px; order: -1; }
       .feature-dark-content { padding: 2rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; }
       .nav { display: none; }
     }
 
@@ -433,6 +496,7 @@
       .stat-number { font-size: 1.7rem; }
       .footer { flex-direction: column; }
       .hero-actions .btn { width: 100%; justify-content: center; }
+      .project-results { gap: 1rem; }
     }
   </style>
 </head>
@@ -440,7 +504,7 @@
   <div class="page">
     <!-- Header -->
     <header class="header">
-      <a href="#" class="logo" aria-label="BCG Automação Industrial">
+      <a href="#" class="logo" onclick="showPage('inicio'); return false;" aria-label="BCG Automação Industrial">
         <span class="logo-mark">BCG</span>
         <span class="logo-text">
           <span class="logo-title">Breaking Computation Group</span>
@@ -448,209 +512,180 @@
         </span>
       </a>
       <nav class="nav" aria-label="Navegação principal">
-        <a href="#" class="active">Início</a>
-        <a href="#">Soluções</a>
-        <a href="#">Robótica</a>
-        <a href="#">Protocolos</a>
-        <a href="#">Projetos</a>
-        <a href="#" class="nav-cta">Contato</a>
+        <a data-page="inicio" class="active" onclick="showPage('inicio')">Início</a>
+        <a data-page="solucoes" onclick="showPage('solucoes')">Soluções</a>
+        <a data-page="robotica" onclick="showPage('robotica')">Robótica</a>
+        <a data-page="protocolos" onclick="showPage('protocolos')">Protocolos</a>
+        <a data-page="projetos" onclick="showPage('projetos')">Projetos</a>
+        <a data-page="contato" class="nav-cta" onclick="showPage('contato')">Contato</a>
       </nav>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
-      <div class="hero-content">
-        <span class="badge">⚡ Integração de sistemas industriais</span>
-        <h1>Redes e robótica para a <em>manufatura avançada</em>.</h1>
-        <p>
-          Projetamos e integramos infraestruturas de rede determinísticas e células robóticas
-          para automação industrial. Do chão de fábrica à nuvem, com segurança e disponibilidade.
-        </p>
-        <div class="hero-actions">
-          <a href="#" class="btn btn-primary">Falar com engenharia</a>
-          <a href="#" class="btn btn-outline">Ver projetos</a>
-        </div>
-      </div>
-      <div class="hero-image">
-        <img
-          src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1200&q=80&auto=format&fit=crop"
-          alt="Braço robótico industrial em operação em linha de montagem automatizada"
-          loading="eager"
-        >
-        <span class="hero-image-label">Célula robótica · Integração em produção</span>
-      </div>
-    </section>
-
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat-item">
-        <div class="stat-number">+<span>180</span></div>
-        <div class="stat-label">Projetos entregues</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number"><span>99,98</span>%</div>
-        <div class="stat-label">Disponibilidade de rede</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number"><span>24</span>/7</div>
-        <div class="stat-label">Suporte técnico</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number"><span>12</span>+</div>
-        <div class="stat-label">Protocolos industriais</div>
-      </div>
-    </div>
-
-    <!-- Soluções -->
-    <div class="section-header">
-      <div class="section-label">O que fazemos</div>
-      <h2 class="section-title">Soluções em redes e automação robótica</h2>
-      <p class="section-sub">
-        Da camada de campo ao nível corporativo: projetos de rede industrial com redundância,
-        segmentação e integração de robôs e sistemas de supervisão.
-      </p>
-    </div>
-
-    <div class="solutions-grid">
-      <article class="solution-card">
-        <div class="solution-card-img">
-          <img
-            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80&auto=format&fit=crop"
-            alt="Engenheira operando sistema de automação com braço robótico ao fundo"
-            loading="lazy"
-          >
-        </div>
-        <div class="solution-card-body">
-          <h3>Redes Fieldbus &amp; Ethernet Industrial</h3>
+    <!-- ================= PÁGINA: INÍCIO ================= -->
+    <main class="page-content active" id="page-inicio">
+      <section class="hero">
+        <div class="hero-content">
+          <span class="badge">⚡ Integração de sistemas industriais</span>
+          <h1>Redes e robótica para a <em>manufatura avançada</em>.</h1>
           <p>
-            Projetos com PROFINET, EtherNet/IP e Modbus TCP. Switches gerenciáveis,
-            VLANs, QoS e anéis de redundância para ambientes severos.
+            Projetamos e integramos infraestruturas de rede determinísticas e células robóticas
+            para automação industrial. Do chão de fábrica à nuvem, com segurança e disponibilidade.
           </p>
-          <span class="card-tag">Determinístico</span>
+          <div class="hero-actions">
+            <a class="btn btn-primary" onclick="showPage('contato')">Falar com engenharia</a>
+            <a class="btn btn-outline" onclick="showPage('projetos')">Ver projetos</a>
+          </div>
         </div>
-      </article>
-
-      <article class="solution-card">
-        <div class="solution-card-img">
+        <div class="hero-image">
           <img
-            src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80&auto=format&fit=crop"
-            alt="Braço robótico colaborativo em célula de montagem de precisão"
-            loading="lazy"
-          >
+            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80&auto=format&fit=crop"
+            alt="Braço robótico industrial em operação em linha de montagem automatizada"
+            loading="eager">
+          <span class="hero-image-label">Célula robótica · Integração em produção</span>
         </div>
-        <div class="solution-card-body">
-          <h3>Células Robóticas &amp; Cobots</h3>
-          <p>
-            Integração de robôs industriais e colaborativos para montagem, paletização
-            e inspeção. Programação, segurança e comissionamento.
-          </p>
-          <span class="card-tag">Robótica</span>
-        </div>
-      </article>
+      </section>
 
-      <article class="solution-card">
-        <div class="solution-card-img">
-          <img
-            src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80&auto=format&fit=crop"
-            alt="Técnico em ambiente industrial monitorando sistemas de controle"
-            loading="lazy"
-          >
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">+<span>180</span></div>
+          <div class="stat-label">Projetos entregues</div>
         </div>
-        <div class="solution-card-body">
-          <h3>Segmentação &amp; Cibersegurança OT</h3>
-          <p>
-            Zonas industriais, DMZ, NAT industrial e políticas de acesso para proteger
-            controladores e células de produção.
-          </p>
-          <span class="card-tag">IEC 62443</span>
+        <div class="stat-item">
+          <div class="stat-number"><span>99,98</span>%</div>
+          <div class="stat-label">Disponibilidade de rede</div>
         </div>
-      </article>
-    </div>
-
-    <!-- Feature escuro -->
-    <section class="feature-dark">
-      <div class="feature-dark-content">
-        <h2>Projetos de automação <span>do zero à operação assistida</span></h2>
-        <p>
-          Levantamento de requisitos, arquitetura de rede e robótica, comissionamento
-          e documentação completa. Suporte 24/7 com SLA e monitoramento contínuo.
-        </p>
-        <a href="#" class="btn-amarelo">Solicitar proposta técnica</a>
+        <div class="stat-item">
+          <div class="stat-number"><span>24</span>/7</div>
+          <div class="stat-label">Suporte técnico</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><span>12</span>+</div>
+          <div class="stat-label">Protocolos industriais</div>
+        </div>
       </div>
-      <div class="feature-dark-img">
-        <img
-          src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=800&q=80&auto=format&fit=crop"
-          alt="Linha de produção automatizada com múltiplos braços robóticos industriais"
-          loading="lazy"
-        >
-      </div>
-    </section>
 
-    <!-- Protocolos -->
-    <div class="protocols-section">
       <div class="section-header">
-        <div class="section-label">Interoperabilidade</div>
-        <h2 class="section-title">Protocolos e padrões suportados</h2>
+        <div class="section-label">O que fazemos</div>
+        <h2 class="section-title">Soluções em redes e automação robótica</h2>
         <p class="section-sub">
-          Integração nativa com os principais padrões da indústria. Sem lock-in de fabricante.
+          Da camada de campo ao nível corporativo: projetos de rede industrial com redundância,
+          segmentação e integração de robôs e sistemas de supervisão.
         </p>
       </div>
-      <div class="protocol-list" aria-label="Protocolos suportados">
-        <span class="protocol">PROFINET</span>
-        <span class="protocol">EtherNet/IP</span>
-        <span class="protocol">Modbus TCP</span>
-        <span class="protocol">OPC UA</span>
-        <span class="protocol">MQTT</span>
-        <span class="protocol">PROFIBUS</span>
-        <span class="protocol">EtherCAT</span>
-        <span class="protocol">HART</span>
-        <span class="protocol">LoRaWAN</span>
-        <span class="protocol">IEC 61850</span>
-        <span class="protocol">AS-i</span>
-        <span class="protocol">CANopen</span>
-        <span class="protocol">Ethernet POWERLINK</span>
-        <span class="protocol">CC-Link IE</span>
-      </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-brand">
-        <a href="#" class="logo" style="margin-bottom: 0.5rem;">
-          <span class="logo-mark" style="font-size: 1.2rem; padding: 0.25rem 0.6rem 0.3rem;">BCG</span>
-          <span class="logo-text">
-            <span class="logo-title" style="font-size: 0.95rem;">Breaking Computation Group</span>
-          </span>
-        </a>
-        <p>Engenharia de redes e automação industrial. Conectividade determinística para a indústria 4.0.</p>
+      <div class="solutions-grid">
+        <article class="solution-card">
+          <div class="solution-card-img">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80&auto=format&fit=crop"
+              alt="Circuitos e componentes de automação industrial" loading="lazy">
+          </div>
+          <div class="solution-card-body">
+            <h3>Redes Fieldbus &amp; Ethernet Industrial</h3>
+            <p>
+              Projetos com PROFINET, EtherNet/IP e Modbus TCP. Switches gerenciáveis,
+              VLANs, QoS e anéis de redundância para ambientes severos.
+            </p>
+            <span class="card-tag">Determinístico</span>
+          </div>
+        </article>
+
+        <article class="solution-card">
+          <div class="solution-card-img">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80&auto=format&fit=crop"
+              alt="Braço robótico colaborativo em célula de montagem de precisão" loading="lazy">
+          </div>
+          <div class="solution-card-body">
+            <h3>Células Robóticas &amp; Cobots</h3>
+            <p>
+              Integração de robôs industriais e colaborativos para montagem, paletização
+              e inspeção. Programação, segurança e comissionamento.
+            </p>
+            <span class="card-tag">Robótica</span>
+          </div>
+        </article>
+
+        <article class="solution-card">
+          <div class="solution-card-img">
+            <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80&auto=format&fit=crop"
+              alt="Técnico em ambiente industrial monitorando sistemas de controle" loading="lazy">
+          </div>
+          <div class="solution-card-body">
+            <h3>Segmentação &amp; Cibersegurança OT</h3>
+            <p>
+              Zonas industriais, DMZ, NAT industrial e políticas de acesso para proteger
+              controladores e células de produção.
+            </p>
+            <span class="card-tag">IEC 62443</span>
+          </div>
+        </article>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Soluções</h4>
-          <a href="#">Redes industriais</a>
-          <a href="#">Robótica</a>
-          <a href="#">Cibersegurança OT</a>
-          <a href="#">Telemetria</a>
+
+      <section class="feature-dark">
+        <div class="feature-dark-content">
+          <h2>Projetos de automação <span>do zero à operação assistida</span></h2>
+          <p>
+            Levantamento de requisitos, arquitetura de rede e robótica, comissionamento
+            e documentação completa. Suporte 24/7 com SLA e monitoramento contínuo.
+          </p>
+          <a class="btn-amarelo" onclick="showPage('contato')">Solicitar proposta técnica</a>
         </div>
-        <div class="footer-col">
-          <h4>Empresa</h4>
-          <a href="#">Sobre</a>
-          <a href="#">Projetos</a>
-          <a href="#">Carreiras</a>
-          <a href="#">Contato</a>
+        <div class="feature-dark-img">
+          <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=800&q=80&auto=format&fit=crop"
+            alt="Linha de produção automatizada com múltiplos braços robóticos industriais" loading="lazy">
         </div>
-        <div class="footer-col">
-          <h4>Recursos</h4>
-          <a href="#">Documentação</a>
-          <a href="#">Blog técnico</a>
-          <a href="#">LinkedIn</a>
+      </section>
+
+      <div class="protocols-section">
+        <div class="section-header">
+          <div class="section-label">Interoperabilidade</div>
+          <h2 class="section-title">Protocolos e padrões suportados</h2>
+          <p class="section-sub">Integração nativa com os principais padrões da indústria. Sem lock-in de fabricante.</p>
+        </div>
+        <div class="protocol-list" aria-label="Protocolos suportados">
+          <span class="protocol">PROFINET</span>
+          <span class="protocol">EtherNet/IP</span>
+          <span class="protocol">Modbus TCP</span>
+          <span class="protocol">OPC UA</span>
+          <span class="protocol">MQTT</span>
+          <span class="protocol">PROFIBUS</span>
+          <span class="protocol">EtherCAT</span>
+          <span class="protocol">HART</span>
+          <span class="protocol">LoRaWAN</span>
+          <span class="protocol">IEC 61850</span>
         </div>
       </div>
-    </footer>
-    <div class="footer-bottom">
-      <span>© 2026 BCG — Breaking Computation Group. Todos os direitos reservados.</span>
-      <span>CNPJ 00.000.000/0001-00 · São Paulo, Brasil</span>
-    </div>
-  </div>
-</body>
-</html>
+    </main>
+
+    <!-- ================= PÁGINA: SOLUÇÕES ================= -->
+    <main class="page-content" id="page-solucoes">
+      <section class="hero" style="padding-bottom: 2rem;">
+        <div class="hero-content">
+          <span class="badge">⚙️ Soluções</span>
+          <h1>Soluções completas em <em>redes industriais</em>.</h1>
+          <p>
+            Projetamos infraestruturas de rede robustas para o chão de fábrica, garantindo
+            determinismo, redundância e cibersegurança para ambientes de automação.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" onclick="showPage('contato')">Solicitar proposta</a>
+            <a class="btn btn-outline" onclick="showPage('protocolos')">Ver protocolos</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1200&q=80&auto=format&fit=crop"
+            alt="Braço robótico de precisão em linha de automação" loading="eager">
+          <span class="hero-image-label">Automação de precisão · Linha de montagem</span>
+        </div>
+      </section>
+
+      <div class="section-header">
+        <div class="section-label">Portfólio</div>
+        <h2 class="section-title">Nossas frentes de atuação</h2>
+        <p class="section-sub">Soluções modulares, do campo ao cloud, com engenharia própria e documentação completa.</p>
+      </div>
+
+      <div class="solutions-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <article class="solution-card">
+          <div class="solution-card-img">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80&auto=format&fit=crop"
+              alt="Servidores e infraestrutura de rede industrial" loading="

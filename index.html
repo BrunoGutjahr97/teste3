@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Central de Iluminação IoT (3 LEDs)</title>
+  <title>Central IoT Multi-LED</title>
   
   <!-- Paho MQTT via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
@@ -26,7 +26,6 @@
       padding: 1.5rem;
     }
 
-    /* Card Principal */
     .glass-card {
       max-width: 850px;
       width: 100%;
@@ -35,11 +34,10 @@
       -webkit-backdrop-filter: blur(14px) saturate(180%);
       border-radius: 2.5rem;
       border: 1px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.25), 0 8px 24px -6px rgba(0, 40, 80, 0.08);
-      padding: 2rem 2.2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.25);
+      padding: 2rem;
     }
 
-    /* Cabeçalho */
     .header {
       display: flex;
       flex-wrap: wrap;
@@ -53,17 +51,14 @@
       font-size: 1.8rem;
       font-weight: 600;
       color: #0b2b44;
-      line-height: 1.2;
     }
 
     .title-sub {
       font-size: 0.9rem;
       color: #3d5a73;
       opacity: 0.8;
-      margin-top: 0.1rem;
     }
 
-    /* Pill de Status */
     .status-pill {
       display: inline-flex;
       align-items: center;
@@ -85,32 +80,10 @@
       transition: all 0.3s ease;
     }
 
-    .status-dot.online {
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
-    }
+    .status-dot.online { background: #10b981; box-shadow: 0 0 10px #10b981; }
+    .status-dot.offline { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
 
-    .status-dot.offline {
-      background: #ef4444;
-      box-shadow: 0 0 10px #ef4444;
-    }
-
-    .status-dot.sync {
-      background: #fbbf24;
-      animation: pulse-dot 1.2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-      0% { transform: scale(0.95); opacity: 0.6; }
-      50% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.6; }
-    }
-
-    /* Campo de Tópico */
-    .topic-area {
-      margin-bottom: 1.5rem;
-    }
-
+    .topic-area { margin-bottom: 1.5rem; }
     .topic-label {
       display: block;
       font-size: 0.75rem;
@@ -129,20 +102,34 @@
       font-size: 0.95rem;
       color: #0b2b44;
       outline: none;
-      transition: all 0.2s;
     }
 
-    .topic-input:focus {
-      border-color: #7aa9d9;
-      background: rgba(255, 255, 255, 0.9);
+    /* Painel de Controle Master */
+    .master-controls {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
-    /* Grid com Controles dos 3 LEDs */
+    .master-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0b2b44;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Grid com LEDs */
     .leds-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1.2rem;
-      margin-top: 1rem;
     }
 
     .led-card {
@@ -163,8 +150,8 @@
     }
 
     .led-circle {
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: #cbdde9;
       display: flex;
@@ -176,31 +163,11 @@
       font-weight: 600;
     }
 
-    /* Cores quando ativados */
-    .led-circle.active-led1 {
-      background: #ef4444;
-      color: white;
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.8);
-    }
+    .led-circle.active-led1 { background: #ef4444; color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+    .led-circle.active-led2 { background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
+    .led-circle.active-led3 { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
 
-    .led-circle.active-led2 {
-      background: #10b981;
-      color: white;
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
-    }
-
-    .led-circle.active-led3 {
-      background: #3b82f6;
-      color: white;
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
-    }
-
-    /* Botões */
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-      width: 100%;
-    }
+    .actions { display: flex; gap: 0.5rem; width: 100%; }
 
     .btn {
       flex: 1;
@@ -216,14 +183,8 @@
       transition: all 0.2s ease;
     }
 
-    .btn.enabled {
-      cursor: pointer;
-      opacity: 1;
-    }
-
-    .btn.enabled:active {
-      transform: scale(0.95);
-    }
+    .btn.enabled { cursor: pointer; opacity: 1; }
+    .btn.enabled:active { transform: scale(0.95); }
 
     .btn-on { background: #2d8f6f; }
     .btn-on.enabled:hover { background: #1f7a5d; }
@@ -231,7 +192,6 @@
     .btn-off { background: #bf7a7a; }
     .btn-off.enabled:hover { background: #ac6363; }
 
-    /* Caixa de Logs / Terminal */
     .log-box {
       margin-top: 1.5rem;
       width: 100%;
@@ -240,7 +200,7 @@
       font-family: monospace;
       padding: 12px;
       border-radius: 12px;
-      height: 120px;
+      height: 110px;
       overflow-y: auto;
       font-size: 0.8rem;
     }
@@ -249,61 +209,62 @@
 <body>
 
 <div class="glass-card">
-  <!-- Cabeçalho -->
   <div class="header">
-    <div class="title-group">
-      <span class="title-main">💡 Central IoT Multi-LED</span>
-      <span class="title-sub">Controle de Hardware · Portas 13, 12 e 11</span>
+    <div>
+      <div class="title-main">💡 Central IoT Multi-LED</div>
+      <div class="title-sub">Portas 13, 12 e 11 · Controle Individual e Geral</div>
     </div>
     <div class="status-pill">
-      <span class="status-dot sync" id="statusDot"></span>
-      <span class="status-text" id="statusText">Sincronizando...</span>
+      <span class="status-dot offline" id="statusDot"></span>
+      <span class="status-text" id="statusText">Desconectado</span>
     </div>
   </div>
 
-  <!-- Tópico MQTT -->
   <div class="topic-area">
     <label class="topic-label" for="topicInput">📡 Tópico MQTT</label>
     <input class="topic-input" id="topicInput" type="text" value="bruno_correa_led_exclusivo/arduino" spellcheck="false">
   </div>
 
-  <!-- Grid de LEDs -->
+  <!-- BOTOES DE CONTROLE GERAL -->
+  <div class="master-controls">
+    <span class="master-title">⚡ Controle Geral (Todos os LEDs)</span>
+    <div class="actions" style="max-width: 420px;">
+      <button class="btn btn-on btn-control" data-cmd="4" disabled>⚡ LIGAR TODOS</button>
+      <button class="btn btn-off btn-control" data-cmd="c" disabled>🚫 DESLIGAR TODOS</button>
+    </div>
+  </div>
+
+  <!-- BOTOES INDIVIDUAIS -->
   <div class="leds-grid">
-    <!-- LED 1 -->
     <div class="led-card">
       <span class="led-title">LED 1 (Pino 13)</span>
-      <div class="led-circle" id="ledCircle1">Desligado</div>
+      <div class="led-circle" id="ledCircle1">Off</div>
       <div class="actions">
-        <button class="btn btn-on btn-control" data-cmd="1" disabled>🔛 LIGAR</button>
-        <button class="btn btn-off btn-control" data-cmd="0" disabled>⏻ DESLIGAR</button>
+        <button class="btn btn-on btn-control" data-cmd="1" disabled>Ligar</button>
+        <button class="btn btn-off btn-control" data-cmd="0" disabled>Desligar</button>
       </div>
     </div>
 
-    <!-- LED 2 -->
     <div class="led-card">
       <span class="led-title">LED 2 (Pino 12)</span>
-      <div class="led-circle" id="ledCircle2">Desligado</div>
+      <div class="led-circle" id="ledCircle2">Off</div>
       <div class="actions">
-        <button class="btn btn-on btn-control" data-cmd="11" disabled>🔛 LIGAR</button>
-        <button class="btn btn-off btn-control" data-cmd="00" disabled>⏻ DESLIGAR</button>
+        <button class="btn btn-on btn-control" data-cmd="11" disabled>Ligar</button>
+        <button class="btn btn-off btn-control" data-cmd="00" disabled>Desligar</button>
       </div>
     </div>
 
-    <!-- LED 3 -->
     <div class="led-card">
       <span class="led-title">LED 3 (Pino 11)</span>
-      <div class="led-circle" id="ledCircle3">Desligado</div>
+      <div class="led-circle" id="ledCircle3">Off</div>
       <div class="actions">
-        <button class="btn btn-on btn-control" data-cmd="111" disabled>🔛 LIGAR</button>
-        <button class="btn btn-off btn-control" data-cmd="000" disabled>⏻ DESLIGAR</button>
+        <button class="btn btn-on btn-control" data-cmd="111" disabled>Ligar</button>
+        <button class="btn btn-off btn-control" data-cmd="000" disabled>Desligar</button>
       </div>
     </div>
   </div>
 
-  <!-- Terminal de Monitoramento -->
-  <div class="log-box" id="logBox">
-    > Conectando ao sistema...<br>
-  </div>
+  <div class="log-box" id="logBox">> Conectando ao sistema...<br></div>
 </div>
 
 <script>
@@ -314,9 +275,9 @@
     const controlButtons = document.querySelectorAll('.btn-control');
     const logBox = document.getElementById('logBox');
 
-    const ledCircle1 = document.getElementById('ledCircle1');
-    const ledCircle2 = document.getElementById('ledCircle2');
-    const ledCircle3 = document.getElementById('ledCircle3');
+    const led1 = document.getElementById('ledCircle1');
+    const led2 = document.getElementById('ledCircle2');
+    const led3 = document.getElementById('ledCircle3');
 
     let currentTopic = topicInput.value.trim();
     let client = null;
@@ -341,20 +302,31 @@
     }
 
     function updateLedUI(payload) {
-      if (payload === '1') { ledCircle1.className = 'led-circle active-led1'; ledCircle1.textContent = 'Ligado'; }
-      if (payload === '0') { ledCircle1.className = 'led-circle'; ledCircle1.textContent = 'Desligado'; }
+      // Individuais
+      if (payload === '1') { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
+      if (payload === '0') { led1.className = 'led-circle'; led1.textContent = 'Off'; }
 
-      if (payload === '11') { ledCircle2.className = 'led-circle active-led2'; ledCircle2.textContent = 'Ligado'; }
-      if (payload === '00') { ledCircle2.className = 'led-circle'; ledCircle2.textContent = 'Desligado'; }
+      if (payload === '11') { led2.className = 'led-circle active-led2'; led2.textContent = 'On'; }
+      if (payload === '00') { led2.className = 'led-circle'; led2.textContent = 'Off'; }
 
-      if (payload === '111') { ledCircle3.className = 'led-circle active-led3'; ledCircle3.textContent = 'Ligado'; }
-      if (payload === '000') { ledCircle3.className = 'led-circle'; ledCircle3.textContent = 'Desligado'; }
+      if (payload === '111') { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
+      if (payload === '000') { led3.className = 'led-circle'; led3.textContent = 'Off'; }
+
+      // Gerais (4 e c)
+      if (payload === '4') {
+        led1.className = 'led-circle active-led1'; led1.textContent = 'On';
+        led2.className = 'led-circle active-led2'; led2.textContent = 'On';
+        led3.className = 'led-circle active-led3'; led3.textContent = 'On';
+      }
+      if (payload === 'c') {
+        led1.className = 'led-circle'; led1.textContent = 'Off';
+        led2.className = 'led-circle'; led2.textContent = 'Off';
+        led3.className = 'led-circle'; led3.textContent = 'Off';
+      }
     }
 
     function connectMqtt() {
-      if (client) {
-        try { client.disconnect(); } catch (_) {}
-      }
+      if (client) { try { client.disconnect(); } catch (_) {} }
 
       const clientId = 'web_' + Math.random().toString(16).substring(2, 10);
       client = new Paho.MQTT.Client('broker.hivemq.com', 8884, clientId);
@@ -364,31 +336,31 @@
         timeout: 10,
         onSuccess: () => {
           isConnected = true;
-          setStatus('online', 'Sistema Online');
+          setStatus('online', 'Online');
           setButtonsEnabled(true);
-          addLog("Conectado com sucesso ao Broker HiveMQ!");
+          addLog("Conectado com sucesso!");
           client.subscribe(currentTopic);
         },
         onFailure: (err) => {
           isConnected = false;
-          setStatus('offline', 'Falha na conexão');
+          setStatus('offline', 'Erro');
           setButtonsEnabled(false);
-          addLog("Erro na conexão: " + err.errorMessage);
+          addLog("Falha: " + err.errorMessage);
           setTimeout(connectMqtt, 5000);
         }
       });
 
-      client.onConnectionLost = (res) => {
+      client.onConnectionLost = () => {
         isConnected = false;
-        setStatus('offline', 'Conexão Perdida');
+        setStatus('offline', 'Desconectado');
         setButtonsEnabled(false);
-        addLog("Conexão perdida. Tentando reconectar...");
+        addLog("Conexão perdida. Reconectando...");
         setTimeout(connectMqtt, 4000);
       };
 
       client.onMessageArrived = (msg) => {
         const payload = msg.payloadString.trim();
-        addLog(`Recebido no tópico: '${payload}'`);
+        addLog(`Recebido: '${payload}'`);
         updateLedUI(payload);
       };
     }
@@ -398,25 +370,23 @@
       const msg = new Paho.MQTT.Message(cmd);
       msg.destinationName = currentTopic;
       client.send(msg);
-      addLog(`Enviado comando: '${cmd}'`);
-      updateLedUI(cmd); // Atualização local imediata
+      addLog(`Enviado: '${cmd}'`);
+      updateLedUI(cmd);
     }
 
-    // Eventos dos botões
     controlButtons.forEach(btn => {
       btn.addEventListener('click', function() {
         publishCommand(this.getAttribute('data-cmd'));
       });
     });
 
-    // Troca de Tópico Dinâmica
     topicInput.addEventListener('change', function() {
       const newTopic = this.value.trim();
       if (newTopic && newTopic !== currentTopic && isConnected) {
         client.unsubscribe(currentTopic);
         currentTopic = newTopic;
         client.subscribe(currentTopic);
-        addLog(`Inscrito no novo tópico: '${currentTopic}'`);
+        addLog(`Novo tópico: '${currentTopic}'`);
       }
     });
 

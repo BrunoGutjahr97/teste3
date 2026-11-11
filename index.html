@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Central IoT - Controle Completo + Potenciômetro</title>
+  <title>Central IoT - Controle Híbrido Botões + Potenciômetro</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
@@ -81,7 +81,7 @@
       border-radius: 60px; font-size: 0.95rem; color: #0b2b44; outline: none;
     }
 
-    /* TELINHA DIGITAL SEPARADA DO POTENCIÔMETRO */
+    /* TELINHA DIGITAL SEPARADA PARA O POTENCIÔMETRO */
     .screen-container {
       background: #0f172a;
       border: 2px solid #334155;
@@ -120,7 +120,7 @@
       transition: width 0.1s ease-out;
     }
 
-    /* CONTROLES MASTER */
+    /* CONTROLE GERAL MASTER */
     .master-controls {
       background: rgba(255, 255, 255, 0.6);
       border-radius: 1.2rem;
@@ -133,7 +133,7 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
-    /* GRID COM OS CARDS DOS LEDS */
+    /* CARDS DOS LEDS */
     .leds-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -202,7 +202,7 @@
   </div>
 
   <div class="topic-area">
-    <label class="topic-label" for="topicInput">📡 Tópico MQTT Principal</label>
+    <label class="topic-label" for="topicInput">📡 Tópico MQTT Comandos</label>
     <input class="topic-input" id="topicInput" type="text" value="bruno_correa_led_exclusivo/arduino" spellcheck="false">
   </div>
 
@@ -215,16 +215,16 @@
     </div>
   </div>
 
-  <!-- CONTROLE GERAL -->
+  <!-- BOTOES DE CONTROLE GERAL -->
   <div class="master-controls">
-    <span style="font-size: 0.85rem; font-weight: 700; color: #0b2b44; text-transform: uppercase;">⚡ Controle Geral (Todos)</span>
+    <span style="font-size: 0.85rem; font-weight: 700; color: #0b2b44; text-transform: uppercase;">⚡ Controle Geral (Todos os LEDs)</span>
     <div class="actions" style="max-width: 420px;">
       <button class="btn btn-on btn-control" data-cmd="4" disabled>⚡ LIGAR TODOS</button>
       <button class="btn btn-off btn-control" data-cmd="c" disabled>🚫 DESLIGAR TODOS</button>
     </div>
   </div>
 
-  <!-- CONTROLES INDIVIDUAIS -->
+  <!-- BOTOES INDIVIDUAIS -->
   <div class="leds-grid">
     <div class="led-card">
       <span style="font-weight: 600; color: #0b2b44;">LED 1 (Pino 13)</span>
@@ -317,12 +317,10 @@
     }
 
     function atualizarPotenciometro(valor) {
-      // Formata com zeros à esquerda no visor digital (ex: 0045, 0512)
       potDisplay.innerText = String(valor).padStart(4, '0');
       const pct = Math.min(100, Math.max(0, (valor / 1023) * 100));
       progressFill.style.width = pct + '%';
 
-      // Atualiza visualmente as lâmpadas pela faixa do potenciômetro
       if (valor > 50) { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
       else { led1.className = 'led-circle'; led1.textContent = 'Off'; }
 
@@ -346,7 +344,7 @@
           isConnected = true;
           setStatus('online', 'Online');
           setButtonsEnabled(true);
-          addLog("Conectado com sucesso ao Broker MQTT!");
+          addLog("Conectado ao Broker MQTT!");
           client.subscribe(topicComando);
           client.subscribe(topicPot);
         },

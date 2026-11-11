@@ -2,10 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Central IoT Multi-LED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central IoT - Controle Completo + Potenciômetro</title>
   
-  <!-- Paho MQTT via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
   <style>
@@ -30,8 +29,8 @@
       max-width: 850px;
       width: 100%;
       background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(14px) saturate(180%);
-      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 2.5rem;
       border: 1px solid rgba(255, 255, 255, 0.7);
       box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.25);
@@ -47,17 +46,8 @@
       gap: 0.5rem;
     }
 
-    .title-main {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #0b2b44;
-    }
-
-    .title-sub {
-      font-size: 0.9rem;
-      color: #3d5a73;
-      opacity: 0.8;
-    }
+    .title-main { font-size: 1.8rem; font-weight: 600; color: #0b2b44; }
+    .title-sub { font-size: 0.9rem; color: #3d5a73; opacity: 0.8; }
 
     .status-pill {
       display: inline-flex;
@@ -73,42 +63,68 @@
     }
 
     .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #fbbf24;
-      transition: all 0.3s ease;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #fbbf24; transition: all 0.3s ease;
     }
-
     .status-dot.online { background: #10b981; box-shadow: 0 0 10px #10b981; }
     .status-dot.offline { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
 
-    .topic-area { margin-bottom: 1.5rem; }
+    .topic-area { margin-bottom: 1.2rem; }
     .topic-label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #2c4b66;
-      margin-bottom: 0.4rem;
+      display: block; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; color: #2c4b66; margin-bottom: 0.4rem;
     }
-
     .topic-input {
-      width: 100%;
-      padding: 0.8rem 1.2rem;
+      width: 100%; padding: 0.8rem 1.2rem;
       background: rgba(255, 255, 255, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: 60px;
-      font-size: 0.95rem;
-      color: #0b2b44;
-      outline: none;
+      border-radius: 60px; font-size: 0.95rem; color: #0b2b44; outline: none;
     }
 
-    /* Painel de Controle Master */
+    /* TELINHA DIGITAL SEPARADA DO POTENCIÔMETRO */
+    .screen-container {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .screen-label {
+      color: #38bdf8;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .digital-display {
+      font-family: monospace;
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #38bdf8;
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+      margin: 0.3rem 0;
+    }
+
+    .progress-bar-bg {
+      width: 100%; height: 12px;
+      background: #1e293b; border-radius: 10px; overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #ef4444, #10b981, #3b82f6);
+      transition: width 0.1s ease-out;
+    }
+
+    /* CONTROLES MASTER */
     .master-controls {
       background: rgba(255, 255, 255, 0.6);
       border-radius: 1.2rem;
-      padding: 1.2rem;
+      padding: 1rem;
       margin-bottom: 1.5rem;
       display: flex;
       flex-direction: column;
@@ -117,15 +133,7 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
-    .master-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #0b2b44;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Grid com LEDs */
+    /* GRID COM OS CARDS DOS LEDS */
     .leds-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -143,24 +151,11 @@
       gap: 1rem;
     }
 
-    .led-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #0b2b44;
-    }
-
     .led-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #cbdde9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      color: #3a5a72;
-      font-size: 0.8rem;
-      font-weight: 600;
+      width: 75px; height: 75px; border-radius: 50%;
+      background: #cbdde9; display: flex; align-items: center;
+      justify-content: center; transition: all 0.3s ease;
+      color: #3a5a72; font-size: 0.8rem; font-weight: 600;
     }
 
     .led-circle.active-led1 { background: #ef4444; color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
@@ -170,39 +165,25 @@
     .actions { display: flex; gap: 0.5rem; width: 100%; }
 
     .btn {
-      flex: 1;
-      padding: 0.65rem 0.5rem;
-      border: none;
-      border-radius: 60px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: white;
-      background: #b0c9dd;
-      cursor: not-allowed;
-      opacity: 0.5;
+      flex: 1; padding: 0.65rem 0.5rem; border: none;
+      border-radius: 60px; font-size: 0.85rem; font-weight: 600;
+      color: white; background: #b0c9dd; cursor: not-allowed; opacity: 0.5;
       transition: all 0.2s ease;
     }
 
     .btn.enabled { cursor: pointer; opacity: 1; }
     .btn.enabled:active { transform: scale(0.95); }
-
     .btn-on { background: #2d8f6f; }
     .btn-on.enabled:hover { background: #1f7a5d; }
-
     .btn-off { background: #bf7a7a; }
     .btn-off.enabled:hover { background: #ac6363; }
 
     .log-box {
-      margin-top: 1.5rem;
-      width: 100%;
-      background-color: #1e1e1e;
-      color: #00ff66;
-      font-family: monospace;
-      padding: 12px;
-      border-radius: 12px;
-      height: 110px;
-      overflow-y: auto;
-      font-size: 0.8rem;
+      margin-top: 1.5rem; width: 100%;
+      background-color: #1e1e1e; color: #00ff66;
+      font-family: monospace; padding: 12px;
+      border-radius: 12px; height: 100px;
+      overflow-y: auto; font-size: 0.8rem;
     }
   </style>
 </head>
@@ -211,8 +192,8 @@
 <div class="glass-card">
   <div class="header">
     <div>
-      <div class="title-main">💡 Central IoT Multi-LED</div>
-      <div class="title-sub">Portas 13, 12 e 11 · Controle Individual e Geral</div>
+      <div class="title-main">💡 Central IoT - Controle + Potenciômetro</div>
+      <div class="title-sub">Portas 13, 12, 11 e Entrada Analógica A1</div>
     </div>
     <div class="status-pill">
       <span class="status-dot offline" id="statusDot"></span>
@@ -221,23 +202,32 @@
   </div>
 
   <div class="topic-area">
-    <label class="topic-label" for="topicInput">📡 Tópico MQTT</label>
+    <label class="topic-label" for="topicInput">📡 Tópico MQTT Principal</label>
     <input class="topic-input" id="topicInput" type="text" value="bruno_correa_led_exclusivo/arduino" spellcheck="false">
   </div>
 
-  <!-- BOTOES DE CONTROLE GERAL -->
+  <!-- TELINHA DIGITAL DO POTENCIÔMETRO -->
+  <div class="screen-container">
+    <span class="screen-label">📟 LEITURA DIGITAL DO POTENCIÔMETRO (A1)</span>
+    <div class="digital-display" id="potDisplay">0000</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- CONTROLE GERAL -->
   <div class="master-controls">
-    <span class="master-title">⚡ Controle Geral (Todos os LEDs)</span>
+    <span style="font-size: 0.85rem; font-weight: 700; color: #0b2b44; text-transform: uppercase;">⚡ Controle Geral (Todos)</span>
     <div class="actions" style="max-width: 420px;">
       <button class="btn btn-on btn-control" data-cmd="4" disabled>⚡ LIGAR TODOS</button>
       <button class="btn btn-off btn-control" data-cmd="c" disabled>🚫 DESLIGAR TODOS</button>
     </div>
   </div>
 
-  <!-- BOTOES INDIVIDUAIS -->
+  <!-- CONTROLES INDIVIDUAIS -->
   <div class="leds-grid">
     <div class="led-card">
-      <span class="led-title">LED 1 (Pino 13)</span>
+      <span style="font-weight: 600; color: #0b2b44;">LED 1 (Pino 13)</span>
       <div class="led-circle" id="ledCircle1">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="1" disabled>Ligar</button>
@@ -246,7 +236,7 @@
     </div>
 
     <div class="led-card">
-      <span class="led-title">LED 2 (Pino 12)</span>
+      <span style="font-weight: 600; color: #0b2b44;">LED 2 (Pino 12)</span>
       <div class="led-circle" id="ledCircle2">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="11" disabled>Ligar</button>
@@ -255,7 +245,7 @@
     </div>
 
     <div class="led-card">
-      <span class="led-title">LED 3 (Pino 11)</span>
+      <span style="font-weight: 600; color: #0b2b44;">LED 3 (Pino 11)</span>
       <div class="led-circle" id="ledCircle3">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="111" disabled>Ligar</button>
@@ -273,13 +263,16 @@
     const statusText = document.getElementById('statusText');
     const topicInput = document.getElementById('topicInput');
     const controlButtons = document.querySelectorAll('.btn-control');
+    const potDisplay = document.getElementById('potDisplay');
+    const progressFill = document.getElementById('progressFill');
     const logBox = document.getElementById('logBox');
 
     const led1 = document.getElementById('ledCircle1');
     const led2 = document.getElementById('ledCircle2');
     const led3 = document.getElementById('ledCircle3');
 
-    let currentTopic = topicInput.value.trim();
+    let topicComando = topicInput.value.trim();
+    let topicPot = "bruno_correa_led_exclusivo/potenciometro";
     let client = null;
     let isConnected = false;
 
@@ -301,34 +294,49 @@
       });
     }
 
-    function updateLedUI(payload) {
-      // Individuais
-      if (payload === '1') { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
-      if (payload === '0') { led1.className = 'led-circle'; led1.textContent = 'Off'; }
+    function updateLedUI(cmd) {
+      if (cmd === '1') { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
+      if (cmd === '0') { led1.className = 'led-circle'; led1.textContent = 'Off'; }
 
-      if (payload === '11') { led2.className = 'led-circle active-led2'; led2.textContent = 'On'; }
-      if (payload === '00') { led2.className = 'led-circle'; led2.textContent = 'Off'; }
+      if (cmd === '11') { led2.className = 'led-circle active-led2'; led2.textContent = 'On'; }
+      if (cmd === '00') { led2.className = 'led-circle'; led2.textContent = 'Off'; }
 
-      if (payload === '111') { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
-      if (payload === '000') { led3.className = 'led-circle'; led3.textContent = 'Off'; }
+      if (cmd === '111') { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
+      if (cmd === '000') { led3.className = 'led-circle'; led3.textContent = 'Off'; }
 
-      // Gerais (4 e c)
-      if (payload === '4') {
+      if (cmd === '4') {
         led1.className = 'led-circle active-led1'; led1.textContent = 'On';
         led2.className = 'led-circle active-led2'; led2.textContent = 'On';
         led3.className = 'led-circle active-led3'; led3.textContent = 'On';
       }
-      if (payload === 'c') {
+      if (cmd === 'c') {
         led1.className = 'led-circle'; led1.textContent = 'Off';
         led2.className = 'led-circle'; led2.textContent = 'Off';
         led3.className = 'led-circle'; led3.textContent = 'Off';
       }
     }
 
+    function atualizarPotenciometro(valor) {
+      // Formata com zeros à esquerda no visor digital (ex: 0045, 0512)
+      potDisplay.innerText = String(valor).padStart(4, '0');
+      const pct = Math.min(100, Math.max(0, (valor / 1023) * 100));
+      progressFill.style.width = pct + '%';
+
+      // Atualiza visualmente as lâmpadas pela faixa do potenciômetro
+      if (valor > 50) { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
+      else { led1.className = 'led-circle'; led1.textContent = 'Off'; }
+
+      if (valor > 350) { led2.className = 'led-circle active-led2'; led2.textContent = 'On'; }
+      else { led2.className = 'led-circle'; led2.textContent = 'Off'; }
+
+      if (valor > 700) { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
+      else { led3.className = 'led-circle'; led3.textContent = 'Off'; }
+    }
+
     function connectMqtt() {
       if (client) { try { client.disconnect(); } catch (_) {} }
 
-      const clientId = 'web_' + Math.random().toString(16).substring(2, 10);
+      const clientId = 'web_master_' + Math.random().toString(16).substring(2, 10);
       client = new Paho.MQTT.Client('broker.hivemq.com', 8884, clientId);
 
       client.connect({
@@ -338,14 +346,15 @@
           isConnected = true;
           setStatus('online', 'Online');
           setButtonsEnabled(true);
-          addLog("Conectado com sucesso!");
-          client.subscribe(currentTopic);
+          addLog("Conectado com sucesso ao Broker MQTT!");
+          client.subscribe(topicComando);
+          client.subscribe(topicPot);
         },
         onFailure: (err) => {
           isConnected = false;
           setStatus('offline', 'Erro');
           setButtonsEnabled(false);
-          addLog("Falha: " + err.errorMessage);
+          addLog("Erro na conexão: " + err.errorMessage);
           setTimeout(connectMqtt, 5000);
         }
       });
@@ -360,17 +369,20 @@
 
       client.onMessageArrived = (msg) => {
         const payload = msg.payloadString.trim();
-        addLog(`Recebido: '${payload}'`);
-        updateLedUI(payload);
+        if (msg.destinationName === topicPot && !isNaN(payload)) {
+          atualizarPotenciometro(parseInt(payload));
+        } else if (msg.destinationName === topicComando) {
+          updateLedUI(payload);
+        }
       };
     }
 
     function publishCommand(cmd) {
       if (!client || !isConnected) return;
       const msg = new Paho.MQTT.Message(cmd);
-      msg.destinationName = currentTopic;
+      msg.destinationName = topicComando;
       client.send(msg);
-      addLog(`Enviado: '${cmd}'`);
+      addLog(`Comando enviado: '${cmd}'`);
       updateLedUI(cmd);
     }
 
@@ -378,16 +390,6 @@
       btn.addEventListener('click', function() {
         publishCommand(this.getAttribute('data-cmd'));
       });
-    });
-
-    topicInput.addEventListener('change', function() {
-      const newTopic = this.value.trim();
-      if (newTopic && newTopic !== currentTopic && isConnected) {
-        client.unsubscribe(currentTopic);
-        currentTopic = newTopic;
-        client.subscribe(currentTopic);
-        addLog(`Novo tópico: '${currentTopic}'`);
-      }
     });
 
     connectMqtt();

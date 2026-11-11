@@ -3,188 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Central IoT - Controle Híbrido Botões + Potenciômetro</title>
+  <title>Central IoT - 4 LEDs PWM + Potenciômetro</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(145deg, #d4eaff 0%, #f0f9ff 100%);
-      padding: 1.5rem;
-    }
-
-    .glass-card {
-      max-width: 850px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-radius: 2.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.25);
-      padding: 2rem;
-    }
-
-    .header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      gap: 0.5rem;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #d4eaff, #f0f9ff); padding: 1.5rem; }
+    .glass-card { max-width: 900px; width: 100%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(14px); border-radius: 2rem; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 20px 40px rgba(0,20,40,0.2); padding: 2rem; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
     .title-main { font-size: 1.8rem; font-weight: 600; color: #0b2b44; }
-    .title-sub { font-size: 0.9rem; color: #3d5a73; opacity: 0.8; }
+    .status-pill { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.8); padding: 0.4rem 1rem; border-radius: 60px; font-size: 0.85rem; font-weight: 500; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; }
+    .status-dot.online { background: #10b981; box-shadow: 0 0 8px #10b981; }
 
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.6);
-      padding: 0.45rem 1.1rem;
-      border-radius: 60px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #1e2f3f;
-    }
+    /* VISOR DIGITAL DO POTENCIÔMETRO */
+    .screen-container { background: #0f172a; border: 2px solid #334155; border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1.5rem; text-align: center; }
+    .screen-label { color: #38bdf8; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+    .digital-display { font-family: monospace; font-size: 3rem; font-weight: 800; color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); margin: 0.2rem 0; }
+    .progress-bar-bg { width: 100%; height: 10px; background: #1e293b; border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ef4444, #10b981, #3b82f6, #a855f7); transition: width 0.1s; }
 
-    .status-dot {
-      width: 12px; height: 12px; border-radius: 50%;
-      background: #fbbf24; transition: all 0.3s ease;
-    }
-    .status-dot.online { background: #10b981; box-shadow: 0 0 10px #10b981; }
-    .status-dot.offline { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+    .master-controls { background: rgba(255, 255, 255, 0.7); border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.8); }
+    
+    /* GRID COM 4 LEDS */
+    .leds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+    .led-card { background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 1.2rem; padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
+    .led-circle { width: 65px; height: 65px; border-radius: 50%; background: #cbdde9; display: flex; align-items: center; justify-content: center; transition: all 0.3s; color: #3a5a72; font-size: 0.75rem; font-weight: 600; }
+    
+    .led-circle.active-led1 { background: #ef4444; color: white; box-shadow: 0 0 18px rgba(239, 68, 68, 0.8); }
+    .led-circle.active-led2 { background: #10b981; color: white; box-shadow: 0 0 18px rgba(16, 185, 129, 0.8); }
+    .led-circle.active-led3 { background: #3b82f6; color: white; box-shadow: 0 0 18px rgba(59, 130, 246, 0.8); }
+    .led-circle.active-led4 { background: #a855f7; color: white; box-shadow: 0 0 18px rgba(168, 85, 247, 0.8); }
 
-    .topic-area { margin-bottom: 1.2rem; }
-    .topic-label {
-      display: block; font-size: 0.75rem; font-weight: 600;
-      text-transform: uppercase; color: #2c4b66; margin-bottom: 0.4rem;
-    }
-    .topic-input {
-      width: 100%; padding: 0.8rem 1.2rem;
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: 60px; font-size: 0.95rem; color: #0b2b44; outline: none;
-    }
+    .actions { display: flex; gap: 0.4rem; width: 100%; }
+    .btn { flex: 1; padding: 0.5rem; border: none; border-radius: 40px; font-size: 0.8rem; font-weight: 600; color: white; cursor: pointer; transition: 0.2s; }
+    .btn-on { background: #2d8f6f; } .btn-off { background: #bf7a7a; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* TELINHA DIGITAL SEPARADA PARA O POTENCIÔMETRO */
-    .screen-container {
-      background: #0f172a;
-      border: 2px solid #334155;
-      border-radius: 1.5rem;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-    }
-
-    .screen-label {
-      color: #38bdf8;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .digital-display {
-      font-family: monospace;
-      font-size: 3.2rem;
-      font-weight: 800;
-      color: #38bdf8;
-      text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-      margin: 0.3rem 0;
-    }
-
-    .progress-bar-bg {
-      width: 100%; height: 12px;
-      background: #1e293b; border-radius: 10px; overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #ef4444, #10b981, #3b82f6);
-      transition: width 0.1s ease-out;
-    }
-
-    /* CONTROLE GERAL MASTER */
-    .master-controls {
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 1.2rem;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-    }
-
-    /* CARDS DOS LEDS */
-    .leds-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
-    }
-
-    .led-card {
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 1.5rem;
-      padding: 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .led-circle {
-      width: 75px; height: 75px; border-radius: 50%;
-      background: #cbdde9; display: flex; align-items: center;
-      justify-content: center; transition: all 0.3s ease;
-      color: #3a5a72; font-size: 0.8rem; font-weight: 600;
-    }
-
-    .led-circle.active-led1 { background: #ef4444; color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
-    .led-circle.active-led2 { background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
-    .led-circle.active-led3 { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
-
-    .actions { display: flex; gap: 0.5rem; width: 100%; }
-
-    .btn {
-      flex: 1; padding: 0.65rem 0.5rem; border: none;
-      border-radius: 60px; font-size: 0.85rem; font-weight: 600;
-      color: white; background: #b0c9dd; cursor: not-allowed; opacity: 0.5;
-      transition: all 0.2s ease;
-    }
-
-    .btn.enabled { cursor: pointer; opacity: 1; }
-    .btn.enabled:active { transform: scale(0.95); }
-    .btn-on { background: #2d8f6f; }
-    .btn-on.enabled:hover { background: #1f7a5d; }
-    .btn-off { background: #bf7a7a; }
-    .btn-off.enabled:hover { background: #ac6363; }
-
-    .log-box {
-      margin-top: 1.5rem; width: 100%;
-      background-color: #1e1e1e; color: #00ff66;
-      font-family: monospace; padding: 12px;
-      border-radius: 12px; height: 100px;
-      overflow-y: auto; font-size: 0.8rem;
-    }
+    .log-box { margin-top: 1.5rem; background: #1e1e1e; color: #00ff66; font-family: monospace; padding: 10px; border-radius: 8px; height: 90px; overflow-y: auto; font-size: 0.75rem; }
   </style>
 </head>
 <body>
@@ -192,42 +49,37 @@
 <div class="glass-card">
   <div class="header">
     <div>
-      <div class="title-main">💡 Central IoT - Controle + Potenciômetro</div>
-      <div class="title-sub">Portas 13, 12, 11 e Entrada Analógica A1</div>
+      <div class="title-main">💡 Controle IoT de 4 LEDs</div>
+      <span style="font-size: 0.85rem; color: #3d5a73;">Pinos PWM: 11, 10, 9 e 6</span>
     </div>
     <div class="status-pill">
-      <span class="status-dot offline" id="statusDot"></span>
-      <span class="status-text" id="statusText">Desconectado</span>
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Desconectado</span>
     </div>
   </div>
 
-  <div class="topic-area">
-    <label class="topic-label" for="topicInput">📡 Tópico MQTT Comandos</label>
-    <input class="topic-input" id="topicInput" type="text" value="bruno_correa_led_exclusivo/arduino" spellcheck="false">
-  </div>
-
-  <!-- TELINHA DIGITAL DO POTENCIÔMETRO -->
+  <!-- VISOR DIGITAL DO POTENCIÔMETRO -->
   <div class="screen-container">
-    <span class="screen-label">📟 LEITURA DIGITAL DO POTENCIÔMETRO (A1)</span>
+    <span class="screen-label">📟 LEITURA DO POTENCIÔMETRO (A1)</span>
     <div class="digital-display" id="potDisplay">0000</div>
     <div class="progress-bar-bg">
       <div class="progress-bar-fill" id="progressFill"></div>
     </div>
   </div>
 
-  <!-- BOTOES DE CONTROLE GERAL -->
+  <!-- BOTOES DE CONTROLE MASTER -->
   <div class="master-controls">
-    <span style="font-size: 0.85rem; font-weight: 700; color: #0b2b44; text-transform: uppercase;">⚡ Controle Geral (Todos os LEDs)</span>
-    <div class="actions" style="max-width: 420px;">
-      <button class="btn btn-on btn-control" data-cmd="4" disabled>⚡ LIGAR TODOS</button>
-      <button class="btn btn-off btn-control" data-cmd="c" disabled>🚫 DESLIGAR TODOS</button>
+    <span style="font-size: 0.8rem; font-weight: 700; color: #0b2b44; text-transform: uppercase;">⚡ CONTROLE GERAL</span>
+    <div class="actions" style="max-width: 350px; margin: 0.5rem auto 0 auto;">
+      <button class="btn btn-on btn-control" data-cmd="L" disabled>⚡ LIGAR TODOS</button>
+      <button class="btn btn-off btn-control" data-cmd="D" disabled>🚫 DESLIGAR TODOS</button>
     </div>
   </div>
 
-  <!-- BOTOES INDIVIDUAIS -->
+  <!-- GRID COM OS 4 LEDS -->
   <div class="leds-grid">
     <div class="led-card">
-      <span style="font-weight: 600; color: #0b2b44;">LED 1 (Pino 13)</span>
+      <span style="font-weight: 600; color: #0b2b44; font-size: 0.85rem;">LED 1 (Pino 11)</span>
       <div class="led-circle" id="ledCircle1">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="1" disabled>Ligar</button>
@@ -236,7 +88,7 @@
     </div>
 
     <div class="led-card">
-      <span style="font-weight: 600; color: #0b2b44;">LED 2 (Pino 12)</span>
+      <span style="font-weight: 600; color: #0b2b44; font-size: 0.85rem;">LED 2 (Pino 10)</span>
       <div class="led-circle" id="ledCircle2">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="11" disabled>Ligar</button>
@@ -245,23 +97,31 @@
     </div>
 
     <div class="led-card">
-      <span style="font-weight: 600; color: #0b2b44;">LED 3 (Pino 11)</span>
+      <span style="font-weight: 600; color: #0b2b44; font-size: 0.85rem;">LED 3 (Pino 9)</span>
       <div class="led-circle" id="ledCircle3">Off</div>
       <div class="actions">
         <button class="btn btn-on btn-control" data-cmd="111" disabled>Ligar</button>
         <button class="btn btn-off btn-control" data-cmd="000" disabled>Desligar</button>
       </div>
     </div>
+
+    <div class="led-card">
+      <span style="font-weight: 600; color: #0b2b44; font-size: 0.85rem;">LED 4 (Pino 6)</span>
+      <div class="led-circle" id="ledCircle4">Off</div>
+      <div class="actions">
+        <button class="btn btn-on btn-control" data-cmd="1111" disabled>Ligar</button>
+        <button class="btn btn-off btn-control" data-cmd="0000" disabled>Desligar</button>
+      </div>
+    </div>
   </div>
 
-  <div class="log-box" id="logBox">> Conectando ao sistema...<br></div>
+  <div class="log-box" id="logBox">> Conectando...<br></div>
 </div>
 
 <script>
   (function() {
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
-    const topicInput = document.getElementById('topicInput');
     const controlButtons = document.querySelectorAll('.btn-control');
     const potDisplay = document.getElementById('potDisplay');
     const progressFill = document.getElementById('progressFill');
@@ -270,28 +130,19 @@
     const led1 = document.getElementById('ledCircle1');
     const led2 = document.getElementById('ledCircle2');
     const led3 = document.getElementById('ledCircle3');
+    const led4 = document.getElementById('ledCircle4');
 
-    let topicComando = topicInput.value.trim();
+    let topicComando = "bruno_correa_led_exclusivo/arduino";
     let topicPot = "bruno_correa_led_exclusivo/potenciometro";
     let client = null;
-    let isConnected = false;
 
     function addLog(msg) {
-      const hora = new Date().toLocaleTimeString();
-      logBox.innerHTML += `[${hora}] ${msg}<br>`;
+      logBox.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
       logBox.scrollTop = logBox.scrollHeight;
     }
 
-    function setStatus(mode, msg) {
-      statusDot.className = 'status-dot ' + mode;
-      statusText.textContent = msg;
-    }
-
     function setButtonsEnabled(enabled) {
-      controlButtons.forEach(btn => {
-        btn.disabled = !enabled;
-        btn.classList.toggle('enabled', enabled);
-      });
+      controlButtons.forEach(btn => btn.disabled = !enabled);
     }
 
     function updateLedUI(cmd) {
@@ -304,66 +155,58 @@
       if (cmd === '111') { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
       if (cmd === '000') { led3.className = 'led-circle'; led3.textContent = 'Off'; }
 
-      if (cmd === '4') {
+      if (cmd === '1111') { led4.className = 'led-circle active-led4'; led4.textContent = 'On'; }
+      if (cmd === '0000') { led4.className = 'led-circle'; led4.textContent = 'Off'; }
+
+      if (cmd === 'L') {
         led1.className = 'led-circle active-led1'; led1.textContent = 'On';
         led2.className = 'led-circle active-led2'; led2.textContent = 'On';
         led3.className = 'led-circle active-led3'; led3.textContent = 'On';
+        led4.className = 'led-circle active-led4'; led4.textContent = 'On';
       }
-      if (cmd === 'c') {
+      if (cmd === 'D') {
         led1.className = 'led-circle'; led1.textContent = 'Off';
         led2.className = 'led-circle'; led2.textContent = 'Off';
         led3.className = 'led-circle'; led3.textContent = 'Off';
+        led4.className = 'led-circle'; led4.textContent = 'Off';
       }
     }
 
     function atualizarPotenciometro(valor) {
       potDisplay.innerText = String(valor).padStart(4, '0');
-      const pct = Math.min(100, Math.max(0, (valor / 1023) * 100));
-      progressFill.style.width = pct + '%';
+      progressFill.style.width = Math.min(100, Math.max(0, (valor / 1023) * 100)) + '%';
 
-      if (valor > 50) { led1.className = 'led-circle active-led1'; led1.textContent = 'On'; }
-      else { led1.className = 'led-circle'; led1.textContent = 'Off'; }
+      led1.className = (valor > 50) ? 'led-circle active-led1' : 'led-circle';
+      led1.textContent = (valor > 50) ? 'On' : 'Off';
 
-      if (valor > 350) { led2.className = 'led-circle active-led2'; led2.textContent = 'On'; }
-      else { led2.className = 'led-circle'; led2.textContent = 'Off'; }
+      led2.className = (valor > 250) ? 'led-circle active-led2' : 'led-circle';
+      led2.textContent = (valor > 250) ? 'On' : 'Off';
 
-      if (valor > 700) { led3.className = 'led-circle active-led3'; led3.textContent = 'On'; }
-      else { led3.className = 'led-circle'; led3.textContent = 'Off'; }
+      led3.className = (valor > 500) ? 'led-circle active-led3' : 'led-circle';
+      led3.textContent = (valor > 500) ? 'On' : 'Off';
+
+      led4.className = (valor > 750) ? 'led-circle active-led4' : 'led-circle';
+      led4.textContent = (valor > 750) ? 'On' : 'Off';
     }
 
     function connectMqtt() {
-      if (client) { try { client.disconnect(); } catch (_) {} }
-
-      const clientId = 'web_master_' + Math.random().toString(16).substring(2, 10);
-      client = new Paho.MQTT.Client('broker.hivemq.com', 8884, clientId);
+      client = new Paho.MQTT.Client('broker.hivemq.com', 8884, 'web_4leds_' + Math.random().toString(16).substring(2, 8));
 
       client.connect({
         useSSL: true,
-        timeout: 10,
         onSuccess: () => {
-          isConnected = true;
-          setStatus('online', 'Online');
+          statusDot.className = 'status-dot online';
+          statusText.innerText = 'Online';
           setButtonsEnabled(true);
-          addLog("Conectado ao Broker MQTT!");
+          addLog("Conectado ao Broker!");
           client.subscribe(topicComando);
           client.subscribe(topicPot);
         },
         onFailure: (err) => {
-          isConnected = false;
-          setStatus('offline', 'Erro');
-          setButtonsEnabled(false);
           addLog("Erro na conexão: " + err.errorMessage);
           setTimeout(connectMqtt, 5000);
         }
       });
-
-      client.onConnectionLost = () => {
-        isConnected = false;
-        setStatus('offline', 'Desconectado');
-        setButtonsEnabled(false);
-        addLog("Conexão perdida. Reconectando...");
-        setTimeout(connectMqtt, 4000);
-      };
 
       client.onMessageArrived = (msg) => {
         const payload = msg.payloadString.trim();
@@ -375,18 +218,14 @@
       };
     }
 
-    function publishCommand(cmd) {
-      if (!client || !isConnected) return;
-      const msg = new Paho.MQTT.Message(cmd);
-      msg.destinationName = topicComando;
-      client.send(msg);
-      addLog(`Comando enviado: '${cmd}'`);
-      updateLedUI(cmd);
-    }
-
     controlButtons.forEach(btn => {
       btn.addEventListener('click', function() {
-        publishCommand(this.getAttribute('data-cmd'));
+        const cmd = this.getAttribute('data-cmd');
+        const msg = new Paho.MQTT.Message(cmd);
+        msg.destinationName = topicComando;
+        client.send(msg);
+        addLog(`Enviado: '${cmd}'`);
+        updateLedUI(cmd);
       });
     });
 
